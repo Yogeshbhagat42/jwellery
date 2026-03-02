@@ -1,0 +1,224 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import ProductCard from './ProductCard';
+
+export default function ShopPage() {
+  const [searchParams] = useSearchParams();
+  const categoryFromURL = searchParams.get('category');
+  const maxPriceFromURL = searchParams.get('maxPrice');
+  const sortFromURL = searchParams.get('sort');
+  
+  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [priceFilter, setPriceFilter] = useState(maxPriceFromURL || '');
+  const [sortBy, setSortBy] = useState(sortFromURL || '');
+
+  useEffect(() => {
+    fetchProducts();
+  }, [categoryFromURL]);
+
+  useEffect(() => {
+    if (maxPriceFromURL) setPriceFilter(maxPriceFromURL);
+  }, [maxPriceFromURL]);
+
+  useEffect(() => {
+    if (sortFromURL) setSortBy(sortFromURL);
+  }, [sortFromURL]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [allProducts, priceFilter, sortBy]);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      const response = await fetch('http://localhost:5000/api/products');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      
+      const data = await response.json();
+      
+      // Filter by category
+      let filteredProducts = data;
+      if (categoryFromURL) {
+        const category = categoryFromURL.toLowerCase();
+        filteredProducts = data.filter(product => 
+          product.category && product.category.toLowerCase() === category.toLowerCase()
+        );
+      }
+      
+      setAllProducts(filteredProducts);
+      
+    } catch (err) {
+      setError('Failed to load products. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const applyFilters = () => {
+    let filtered = [...allProducts];
+
+    // Price filter
+    if (priceFilter && Number(priceFilter) > 0) {
+      filtered = filtered.filter(p => p.price <= Number(priceFilter));
+    }
+
+    // Sort
+    if (sortBy === 'price_low') {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price_high') {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'name') {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'newest') {
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    setProducts(filtered);
+  };
+
+  const getCategoryDisplayName = () => {
+    if (!categoryFromURL) return "All Products";
+    
+    const categoryMap = {
+      'earrings': 'Earrings',
+      'bracelets': 'Bracelets', 
+      'necklaces': 'Necklaces',
+      'necklace': 'Necklaces',
+      'rings': 'Rings',
+      'couple-rings': 'Couple Rings',
+      'mangalsutra': 'Mangalsutra',
+      'anklets': 'Anklets',
+      'nose-pins': 'Nose Pins'
+    };
+    
+    return categoryMap[categoryFromURL] || 
+           categoryFromURL.charAt(0).toUpperCase() + categoryFromURL.slice(1);
+  };
+
+  return (
+    <div className="container py-4">
+      <h4 className="text-center mb-4" style={{ color: "#0B6F73" }}>
+        {getCategoryDisplayName()} 
+        {products.length > 0 && ` (${products.length})`}
+      </h4>
+
+      {/* Filters Bar */}
+      {!loading && allProducts.length > 0 && (
+        <div className="bg-white p-3 shadow-sm mb-4">
+          <div className="row g-3 align-items-center">
+            <div className="col-auto">
+              <span className="small fw-semibold" style={{ color: '#0B6F73' }}>Filters:</span>
+            </div>
+            <div className="col-auto">
+              <select
+                className="form-select form-select-sm rounded-0"
+                value={priceFilter}
+                onChange={(e) => setPriceFilter(e.target.value)}
+                style={{ borderColor: '#0B6F73', minWidth: '160px' }}
+              >
+                <option value="">All Prices</option>
+                <option value="500">Under ₹500</option>
+                <option value="1000">Under ₹1,000</option>
+                <option value="2000">Under ₹2,000</option>
+                <option value="5000">Under ₹5,000</option>
+                <option value="10000">Under ₹10,000</option>
+              </select>
+            </div>
+            <div className="col-auto">
+              <select
+                className="form-select form-select-sm rounded-0"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{ borderColor: '#0B6F73', minWidth: '160px' }}
+              >
+                <option value="">Default Sort</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="name">Name: A to Z</option>
+                <option value="newest">Newest First</option>
+              </select>
+            </div>
+            {(priceFilter || sortBy) && (
+              <div className="col-auto">
+                <button
+                  className="btn btn-sm btn-outline-secondary rounded-0"
+                  onClick={() => { setPriceFilter(''); setSortBy(''); }}
+                >
+                  <i className="bi bi-x-lg me-1"></i>Clear Filters
+                </button>
+              </div>
+            )}
+            {priceFilter && (
+              <div className="col-auto">
+                <span className="badge" style={{ backgroundColor: '#0B6F73' }}>
+                  {products.length} of {allProducts.length} products
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      
+      {loading ? (
+        <div className="text-center py-5">
+          <div className="spinner-border" style={{ color: "#0B6F73" }} role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-2 small">Loading products...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-5">
+          <div className="alert alert-warning">
+            <p>{error}</p>
+            <button 
+              onClick={fetchProducts}
+              className="btn btn-sm mt-2"
+              style={{ backgroundColor: "#0B6F73", color: "#fff" }}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      ) : products.length === 0 ? (
+        <div className="text-center py-5">
+          <div className="alert alert-warning">
+            <h5>No Products Found</h5>
+            <p>
+              {categoryFromURL 
+                ? `No products found in "${getCategoryDisplayName()}" category`
+                : 'No products available'
+              }
+            </p>
+            <Link to="/" className="btn btn-sm mt-2" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
+              ← Back to Home
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="row g-4">
+            {products.map(product => (
+              <div key={product._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-4">
+            <Link to="/" className="btn" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
+              &larr; Back to Home
+            </Link>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
