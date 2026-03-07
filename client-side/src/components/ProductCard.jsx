@@ -66,7 +66,7 @@ export default function ProductCard({ product }) {
             className="card-img-top"
             alt={product.name}
             style={{
-              height: '300px',
+              height: 'clamp(180px, 40vw, 300px)',
               objectFit: 'cover',
               transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }}
@@ -77,13 +77,13 @@ export default function ProductCard({ product }) {
         </Link>
         {discount > 0 && (
           <span
-            className="position-absolute top-0 start-0 m-3"
+            className="position-absolute top-0 start-0 m-2"
             style={{
               backgroundColor: '#0B6F73',
               color: '#fff',
-              fontSize: '11px',
+              fontSize: '10px',
               fontWeight: 600,
-              padding: '4px 10px',
+              padding: '3px 8px',
               letterSpacing: '0.5px'
             }}
           >
@@ -92,10 +92,10 @@ export default function ProductCard({ product }) {
         )}
         <button
           onClick={toggleWishlist}
-          className="btn position-absolute top-0 end-0 m-3 p-0 d-flex align-items-center justify-content-center"
+          className="btn position-absolute top-0 end-0 m-2 p-0 d-flex align-items-center justify-content-center"
           style={{
-            width: 38,
-            height: 38,
+            width: 32,
+            height: 32,
             borderRadius: '50%',
             background: '#fff',
             border: 'none',
@@ -107,26 +107,24 @@ export default function ProductCard({ product }) {
         >
           <i
             className={`bi ${wishlisted ? 'bi-heart-fill' : 'bi-heart'}`}
-            style={{ fontSize: '16px', color: wishlisted ? '#e74c3c' : '#666' }}
+            style={{ fontSize: '14px', color: wishlisted ? '#e74c3c' : '#666' }}
           ></i>
         </button>
       </div>
-      <div className="card-body p-3">
-        <p className="text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+      <div className="card-body p-2 p-md-3">
+        <p className="text-muted mb-1" style={{ fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase' }}>
           {product.category}
         </p>
         <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
-          <h6 className="card-title mb-2" style={{ fontSize: '15px', fontWeight: 600, lineHeight: 1.3 }}>{product.name}</h6>
+          <h6 className="card-title mb-1 text-truncate" style={{ fontSize: '13px', fontWeight: 600, lineHeight: 1.3 }}>{product.name}</h6>
         </Link>
-        <div className="d-flex justify-content-between align-items-center mb-2">
-          <div>
-            <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '17px' }}>₹{product.price}</span>
-            {product.originalPrice && (
-              <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '13px' }}>
-                ₹{product.originalPrice}
-              </span>
-            )}
-          </div>
+        <div className="mb-2">
+          <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '15px' }}>₹{product.price}</span>
+          {product.originalPrice && (
+            <span className="text-muted text-decoration-line-through ms-1" style={{ fontSize: '12px' }}>
+              ₹{product.originalPrice}
+            </span>
+          )}
         </div>
         <button
           onClick={handleAddToCart}
@@ -135,8 +133,8 @@ export default function ProductCard({ product }) {
           style={{
             backgroundColor: showMessage ? '#28a745' : '#0B6F73',
             color: 'white',
-            fontSize: '12px',
-            padding: '10px 0',
+            fontSize: '11px',
+            padding: '8px 0',
             letterSpacing: '1px',
             transition: 'all 0.3s ease'
           }}

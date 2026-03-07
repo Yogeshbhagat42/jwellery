@@ -115,49 +115,42 @@ export default function ShopPage() {
 
         {/* Filters Bar */}
         {!loading && allProducts.length > 0 && (
-          <div className="p-3 mb-4" style={{ backgroundColor: '#fafafa', border: '1px solid #eee' }}>
-            <div className="row g-3 align-items-center">
-              <div className="col-auto">
-                <span className="small fw-semibold" style={{ color: '#0B6F73' }}>Filters:</span>
-              </div>
-              <div className="col-auto">
-                <select
-                  className="form-select form-select-sm rounded-0"
-                  value={priceFilter}
-                  onChange={(e) => setPriceFilter(e.target.value)}
-                  style={{ borderColor: '#0B6F73', minWidth: '160px' }}
-                >
-                  <option value="">All Prices</option>
-                  <option value="500">Under ₹500</option>
-                  <option value="1000">Under ₹1,000</option>
-                  <option value="2000">Under ₹2,000</option>
-                  <option value="5000">Under ₹5,000</option>
-                  <option value="10000">Under ₹10,000</option>
-                </select>
-              </div>
-              <div className="col-auto">
-                <select
-                  className="form-select form-select-sm rounded-0"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  style={{ borderColor: '#0B6F73', minWidth: '160px' }}
-                >
-                  <option value="">Default Sort</option>
-                  <option value="price_low">Price: Low to High</option>
-                  <option value="price_high">Price: High to Low</option>
-                  <option value="name">Name: A to Z</option>
-                  <option value="newest">Newest First</option>
-                </select>
-              </div>
+          <div className="p-2 p-md-3 mb-3 mb-md-4" style={{ backgroundColor: '#fafafa', border: '1px solid #eee' }}>
+            <div className="d-flex flex-wrap gap-2 align-items-center">
+              <span className="small fw-semibold" style={{ color: '#0B6F73', fontSize: '12px' }}>Filters:</span>
+              <select
+                className="form-select form-select-sm rounded-0"
+                value={priceFilter}
+                onChange={(e) => setPriceFilter(e.target.value)}
+                style={{ borderColor: '#0B6F73', maxWidth: '160px', fontSize: '12px' }}
+              >
+                <option value="">All Prices</option>
+                <option value="500">Under ₹500</option>
+                <option value="1000">Under ₹1,000</option>
+                <option value="2000">Under ₹2,000</option>
+                <option value="5000">Under ₹5,000</option>
+                <option value="10000">Under ₹10,000</option>
+              </select>
+              <select
+                className="form-select form-select-sm rounded-0"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{ borderColor: '#0B6F73', maxWidth: '160px', fontSize: '12px' }}
+              >
+                <option value="">Default Sort</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                <option value="name">Name: A to Z</option>
+                <option value="newest">Newest First</option>
+              </select>
               {(priceFilter || sortBy) && (
-                <div className="col-auto">
-                  <button
-                    className="btn btn-sm btn-outline-secondary rounded-0"
-                    onClick={() => { setPriceFilter(''); setSortBy(''); }}
-                  >
-                    <i className="bi bi-x-lg me-1"></i>Clear
-                  </button>
-                </div>
+                <button
+                  className="btn btn-sm btn-outline-secondary rounded-0"
+                  onClick={() => { setPriceFilter(''); setSortBy(''); }}
+                  style={{ fontSize: '11px' }}
+                >
+                  <i className="bi bi-x-lg me-1"></i>Clear
+                </button>
               )}
             </div>
           </div>
@@ -201,7 +194,7 @@ export default function ShopPage() {
         </div>
       ) : (
         <>
-          <div className="row g-3">
+          <div className="row g-2 g-md-3">
             {products.map(product => (
               <div key={product._id} className="col-6 col-md-4 col-lg-3">
                 <ProductCard product={product} />

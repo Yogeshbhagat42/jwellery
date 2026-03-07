@@ -1,5 +1,11 @@
 /* ===== Admin Panel Responsive Layout ===== */
 
+/* Prevent horizontal scroll globally */
+html, body, #root {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 /* Desktop: sidebar always visible, content pushed right */
 @media (min-width: 992px) {
   .admin-sidebar {
@@ -21,33 +27,41 @@
   }
   .admin-main-content {
     margin-left: 0 !important;
+    width: 100%;
   }
 }
 
-/* Dashboard responsive tweaks */
+/* Mobile compact layout */
 @media (max-width: 767.98px) {
-  .container-fluid.px-4 {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+  .admin-main-content .px-3 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
-  /* Smaller stat values on mobile */
-  .card-body h3 {
-    font-size: 18px !important;
+  /* Compact header bar */
+  .admin-main-content .bg-white.rounded {
+    padding: 8px 10px !important;
+    margin-bottom: 8px !important;
   }
-  .card-body .rounded-circle {
-    width: 40px !important;
-    height: 40px !important;
+  /* Compact cards */
+  .card {
+    border-radius: 8px !important;
   }
-  .card-body .rounded-circle i {
-    font-size: 18px !important;
+  .card-header {
+    padding: 8px 10px !important;
+  }
+  .card-body {
+    padding: 8px 10px !important;
+  }
+  /* Chart containers resize */
+  .card-body canvas {
+    max-height: 200px;
   }
 }
 
-/* Table responsive on small screens */
-@media (max-width: 575.98px) {
-  .table th, .table td {
-    white-space: nowrap;
-    font-size: 12px !important;
-    padding: 10px 12px !important;
+/* Very small phones */
+@media (max-width: 400px) {
+  .admin-main-content h5,
+  .admin-main-content h4 {
+    font-size: 15px !important;
   }
 }

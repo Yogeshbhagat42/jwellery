@@ -56,16 +56,16 @@ export default function Products() {
   };
 
   return (
-    <div style={{ padding: '70px 0', backgroundColor: '#fff' }}>
+    <div style={{ padding: '50px 0', backgroundColor: '#fff' }}>
       <div className="container">
-        <div className="text-center mb-5">
+        <div className="text-center mb-4">
           <p className="text-uppercase mb-2" style={{ color: '#0B6F73', fontSize: '11px', letterSpacing: '3px', fontWeight: 600 }}>
             Fresh Picks
           </p>
           <h2 className="fw-bold" style={{ color: '#1a1a1a', fontSize: '28px' }}>
             New Arrivals
           </h2>
-          <p className="text-muted mt-2" style={{ fontSize: '15px' }}>
+          <p className="text-muted mt-2 d-none d-md-block" style={{ fontSize: '15px' }}>
             Discover our latest collection of stunning pieces
           </p>
         </div>
@@ -78,9 +78,49 @@ export default function Products() {
           </div>
         ) : (
           <>
-            <div className="row g-4">
+            {/* Mobile: horizontal scroll | Desktop: grid */}
+            <style>{`
+              .products-scroll-mobile {
+                display: flex;
+                overflow-x: auto;
+                gap: 12px;
+                padding-bottom: 16px;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+              }
+              .products-scroll-mobile::-webkit-scrollbar { display: none; }
+              .products-scroll-mobile .product-scroll-item {
+                min-width: 200px;
+                max-width: 200px;
+                flex-shrink: 0;
+                scroll-snap-align: start;
+              }
+              @media (min-width: 768px) {
+                .products-scroll-mobile {
+                  display: grid;
+                  grid-template-columns: repeat(4, 1fr);
+                  overflow-x: visible;
+                  gap: 20px;
+                  scroll-snap-type: none;
+                  padding-bottom: 0;
+                }
+                .products-scroll-mobile .product-scroll-item {
+                  min-width: unset;
+                  max-width: unset;
+                }
+              }
+              @media (min-width: 768px) and (max-width: 991.98px) {
+                .products-scroll-mobile {
+                  grid-template-columns: repeat(3, 1fr);
+                }
+              }
+            `}</style>
+
+            <div className="products-scroll-mobile">
               {products.map((p) => (
-                <div key={p.id} className="col-6 col-md-4 col-lg-3">
+                <div key={p.id} className="product-scroll-item">
                   <div
                     className="card h-100 border-0 overflow-hidden"
                     style={{
@@ -104,7 +144,7 @@ export default function Products() {
                         className="card-img-top"
                         alt={p.name}
                         style={{
-                          height: '300px',
+                          height: '220px',
                           objectFit: 'cover',
                           transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                         }}
@@ -114,13 +154,13 @@ export default function Products() {
                       />
                       {p.discount > 0 && (
                         <span
-                          className="position-absolute top-0 start-0 m-3"
+                          className="position-absolute top-0 start-0 m-2"
                           style={{
                             backgroundColor: '#0B6F73',
                             color: '#fff',
-                            fontSize: '11px',
+                            fontSize: '10px',
                             fontWeight: 600,
-                            padding: '4px 10px',
+                            padding: '3px 8px',
                             letterSpacing: '0.5px'
                           }}
                         >
@@ -129,20 +169,20 @@ export default function Products() {
                       )}
                     </Link>
 
-                    <div className="card-body p-3 d-flex flex-column justify-content-between">
+                    <div className="card-body p-2 p-md-3 d-flex flex-column justify-content-between">
                       <div>
                         {p.category && (
-                          <p className="mb-1 text-muted" style={{ fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                          <p className="mb-1 text-muted" style={{ fontSize: '10px', letterSpacing: '1px', textTransform: 'uppercase' }}>
                             {p.category}
                           </p>
                         )}
                         <Link to={`/product/${p.id}`} className="text-decoration-none text-dark">
-                          <p className="mb-2 fw-semibold" style={{ fontSize: '15px', lineHeight: 1.3 }}>{p.name}</p>
+                          <p className="mb-1 fw-semibold text-truncate" style={{ fontSize: '13px', lineHeight: 1.3 }}>{p.name}</p>
                         </Link>
 
-                        <p className="mb-3" style={{ fontSize: '14px' }}>
-                          <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '17px' }}>₹{p.price}</span>{" "}
-                          <span className="text-muted text-decoration-line-through" style={{ fontSize: '13px' }}>
+                        <p className="mb-2" style={{ fontSize: '13px' }}>
+                          <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '15px' }}>₹{p.price}</span>{" "}
+                          <span className="text-muted text-decoration-line-through" style={{ fontSize: '12px' }}>
                             ₹{p.oldPrice}
                           </span>
                         </p>
@@ -153,8 +193,8 @@ export default function Products() {
                         style={{
                           backgroundColor: addedId === p.id ? "#28a745" : "#0B6F73",
                           color: "#fff",
-                          fontSize: '12px',
-                          padding: '10px 0',
+                          fontSize: '11px',
+                          padding: '8px 0',
                           letterSpacing: '1px',
                           transition: 'all 0.3s ease'
                         }}
