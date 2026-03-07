@@ -350,8 +350,8 @@ export default function Checkout() {
 
               <button
                 type="submit"
-                className="btn w-100 text-white py-3 mt-4 rounded-0 fw-semibold"
-                style={{ backgroundColor: '#0B6F73', fontSize: '16px' }}
+                className="btn w-100 text-white py-3 mt-4 fw-semibold"
+                style={{ backgroundColor: '#0B6F73', fontSize: '16px', borderRadius: '10px' }}
                 disabled={loading}
               >
                 {loading ? (
@@ -368,8 +368,16 @@ export default function Checkout() {
 
         {/* Order Summary */}
         <div className="col-md-5">
-          <div className="bg-white p-4 shadow-sm">
-            <h5 className="mb-3" style={{ color: '#0B6F73' }}>
+          <div 
+            className="bg-white p-4"
+            style={{ 
+              borderRadius: '12px',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)',
+              position: 'sticky',
+              top: '20px'
+            }}
+          >
+            <h5 className="mb-3 fw-semibold" style={{ color: '#0B6F73' }}>
               <i className="bi bi-bag me-2"></i>Order Summary ({cartItems.length} items)
             </h5>
             {cartItems.map((item) => (
@@ -377,14 +385,14 @@ export default function Checkout() {
                 <img
                   src={item.image || '/placeholder.jpg'}
                   alt={item.name}
-                  style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 4 }}
+                  style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: '8px' }}
                   onError={(e) => { e.target.src = '/placeholder.jpg'; }}
                 />
                 <div className="flex-grow-1">
                   <p className="mb-0 small fw-semibold">{item.name}</p>
                   <p className="mb-0 text-muted small">Qty: {item.quantity}</p>
                 </div>
-                <span className="fw-bold">{'\u20B9'}{item.price * item.quantity}</span>
+                <span className="fw-bold" style={{ color: '#0B6F73' }}>{'\u20B9'}{item.price * item.quantity}</span>
               </div>
             ))}
 
@@ -399,7 +407,7 @@ export default function Checkout() {
               </div>
               <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Payment</span>
-                <span className="badge" style={{ backgroundColor: '#0B6F73' }}>
+                <span className="badge" style={{ backgroundColor: '#0B6F73', borderRadius: '20px', padding: '5px 12px' }}>
                   {paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online Payment'}
                 </span>
               </div>
@@ -410,6 +418,7 @@ export default function Checkout() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -82,22 +82,32 @@ export default function OrderSuccess() {
 
   if (loading) {
     return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border" style={{ color: '#0B6F73' }} role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
+        <div className="container py-5 text-center">
+          <div className="spinner-border" style={{ color: '#0B6F73', width: '3rem', height: '3rem' }} role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
-      {/* Success Message */}
-      {!showInvoice && (
-        <div className="text-center bg-white p-5 shadow-sm mx-auto" style={{ maxWidth: '600px' }}>
-          <div
-            className="d-inline-flex align-items-center justify-content-center mb-4"
-            style={{ width: 80, height: 80, borderRadius: '50%', backgroundColor: '#d4edda' }}
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
+      <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        {/* Success Message */}
+        {!showInvoice && (
+          <div 
+            className="text-center bg-white p-5 mx-auto" 
+            style={{ 
+              maxWidth: '600px',
+              borderRadius: '16px',
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)'
+            }}
+          >
+            <div
+              className="d-inline-flex align-items-center justify-content-center mb-4"
+              style={{ width: 100, height: 100, borderRadius: '50%', backgroundColor: '#d4edda' }}
           >
             <i className="bi bi-check-lg" style={{ fontSize: '40px', color: '#0B6F73' }}></i>
           </div>
@@ -297,6 +307,7 @@ export default function OrderSuccess() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
