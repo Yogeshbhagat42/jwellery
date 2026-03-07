@@ -1,6 +1,7 @@
 // App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
@@ -14,6 +15,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Check auth status on app load
   useEffect(() => {
@@ -120,10 +122,10 @@ function App() {
         <Route path="/*" element={
           isAuthenticated ? (
             <div className="d-flex">
-              <Sidebar />
-              <div className="flex-grow-1" style={{ marginLeft: "260px", minHeight: "100vh", backgroundColor: "#F8F9FA" }}>
+              <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+              <div className="admin-main-content flex-grow-1" style={{ minHeight: "100vh", backgroundColor: "#F8F9FA" }}>
                 <div className="px-3 px-md-4 py-3">
-                  <Header user={user} onLogout={logout} />
+                  <Header user={user} onLogout={logout} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
                   <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/addproduct" element={<AddProduct />} />

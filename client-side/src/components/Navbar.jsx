@@ -296,6 +296,13 @@ export default function Navbar() {
           transition: max-height 0.3s ease;
         }
         .mobile-sub-menu.open { max-height: 500px; }
+        
+        /* Navbar responsive fixes */
+        @media (max-width: 575.98px) {
+          .navbar { padding-left: 8px !important; padding-right: 8px !important; }
+          .navbar-brand span:first-child { font-size: 22px !important; letter-spacing: 1px !important; }
+          .navbar-brand span:last-child { font-size: 8px !important; }
+        }
       `}</style>
 
       {/* Top Banner */}
@@ -383,14 +390,14 @@ export default function Navbar() {
         </div>
 
         {/* Icons */}
-        <div className="d-flex align-items-center gap-3">
+        <div className="d-flex align-items-center flex-nowrap" style={{ gap: '10px' }}>
           <Link to={isAuthenticated ? "/account" : "/login"}>
-            <i className="bi bi-person" style={{ color: "#0B6F73", fontSize: "1.4rem" }}></i>
+            <i className="bi bi-person" style={{ color: "#0B6F73", fontSize: "1.3rem" }}></i>
           </Link>
           <Link to="/wishlist" className="position-relative">
-            <i className="bi bi-heart" style={{ color: "#0B6F73", fontSize: "1.4rem" }}></i>
+            <i className="bi bi-heart" style={{ color: "#0B6F73", fontSize: "1.3rem" }}></i>
             {wishlistCount > 0 && (
-              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '9px', padding: '3px 5px' }}>
                 {wishlistCount}
               </span>
             )}
@@ -399,9 +406,9 @@ export default function Navbar() {
             onClick={() => setIsCartOpen(true)}
             className="btn position-relative p-0 border-0 bg-transparent"
           >
-            <i className="bi bi-bag" style={{ color: "#0B6F73", fontSize: "1.4rem" }}></i>
+            <i className="bi bi-bag" style={{ color: "#0B6F73", fontSize: "1.3rem" }}></i>
             {cartCount > 0 && (
-              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '9px', padding: '3px 5px' }}>
                 {cartCount}
               </span>
             )}

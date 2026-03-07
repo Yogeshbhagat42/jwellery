@@ -1,7 +1,7 @@
 // components/Header.jsx
 import { useState } from "react";
 
-const Header = ({ user, onLogout }) => {
+const Header = ({ user, onLogout, onToggleSidebar }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {
@@ -15,16 +15,27 @@ const Header = ({ user, onLogout }) => {
     <div className="d-flex justify-content-between align-items-center p-3 mb-3 bg-white rounded" 
       style={{ border: "1px solid #E8E8E8" }}>
       
-      <div>
-        <h6 className="fw-semibold mb-0" style={{ color: "#000000", fontSize: "15px" }}>Dashboard</h6>
-        <small className="text-muted" style={{ fontSize: "12px" }}>Manage your jewelry collection</small>
+      <div className="d-flex align-items-center gap-3">
+        {/* Hamburger button — visible only on mobile/tablet */}
+        <button
+          className="btn btn-sm d-lg-none p-1 border-0"
+          onClick={onToggleSidebar}
+          style={{ fontSize: "22px", lineHeight: 1 }}
+          aria-label="Toggle sidebar"
+        >
+          <i className="bi bi-list"></i>
+        </button>
+        <div>
+          <h6 className="fw-semibold mb-0" style={{ color: "#000000", fontSize: "15px" }}>Dashboard</h6>
+          <small className="text-muted d-none d-sm-inline" style={{ fontSize: "12px" }}>Manage your jewelry collection</small>
+        </div>
       </div>
       
       <div className="d-flex align-items-center gap-2">
         {/* Admin Profile */}
         <div className="position-relative">
           <button 
-            className="btn btn-sm border-0 d-flex align-items-center gap-2 px-3 py-2 rounded"
+            className="btn btn-sm border-0 d-flex align-items-center gap-2 px-2 px-sm-3 py-2 rounded"
             onClick={() => setShowDropdown(!showDropdown)}
             style={{
               background: "#F8F9FA",
@@ -37,7 +48,7 @@ const Header = ({ user, onLogout }) => {
                 {user?.name?.charAt(0) || 'A'}
               </span>
             </div>
-            <span className="fw-medium" style={{ fontSize: "13px", color: "#000000" }}>
+            <span className="fw-medium d-none d-sm-inline" style={{ fontSize: "13px", color: "#000000" }}>
               {user?.name || 'Admin'}
             </span>
           </button>
@@ -54,7 +65,7 @@ const Header = ({ user, onLogout }) => {
             >
               <div className="p-2 border-bottom">
                 <small className="text-muted">Logged in as</small>
-                <div className="fw-semibold">{user?.email || 'admin@gmail.com'}</div>
+                <div className="fw-semibold" style={{ fontSize: "13px" }}>{user?.email || 'admin@gmail.com'}</div>
               </div>
               
               <button 

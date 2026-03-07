@@ -49,19 +49,22 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [productsData, statsData] = await Promise.all([
-          getProducts(),
-          getDashboardStats()
-        ]);
-        setProducts(productsData);
-        if (statsData.success) {
-          setStats(statsData.stats);
+        const productsData = await getProducts();
+        setProducts(Array.isArray(productsData) ? productsData : []);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+      
+      try {
+        const statsData = await getDashboardStats();
+        if (statsData && statsData.success) {
+          setStats(prev => ({ ...prev, ...statsData.stats }));
         }
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching stats:', error);
       }
+      
+      setLoading(false);
     };
     fetchData();
   }, []);
