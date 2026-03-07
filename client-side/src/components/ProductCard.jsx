@@ -37,58 +37,72 @@ export default function ProductCard({ product }) {
     }
   };
 
-  const discount = product.originalPrice 
+  const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 50;
 
   return (
-    <div 
-      className="card h-100 border-0"
-      style={{ 
+    <div
+      className="card h-100 border-0 overflow-hidden"
+      style={{
         backgroundColor: '#fff',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+        boxShadow: '0 2px 15px rgba(0,0,0,0.06)',
+        transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        borderRadius: '8px'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-5px)';
-        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12)';
+        e.currentTarget.style.transform = 'translateY(-8px)';
+        e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.12)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+        e.currentTarget.style.boxShadow = '0 2px 15px rgba(0,0,0,0.06)';
       }}
     >
-      <div className="position-relative">
+      <div className="position-relative overflow-hidden">
         <Link to={`/product/${product._id}`}>
           <img
             src={product.images?.[0] || '/placeholder.jpg'}
             className="card-img-top"
             alt={product.name}
-            style={{ height: '220px', objectFit: 'cover' }}
+            style={{
+              height: '300px',
+              objectFit: 'cover',
+              transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            }}
             onError={(e) => { e.target.src = '/placeholder.jpg'; }}
+            onMouseEnter={(e) => { e.target.style.transform = 'scale(1.05)'; }}
+            onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; }}
           />
         </Link>
         {discount > 0 && (
-          <span 
-            className="position-absolute top-0 start-0 m-2 badge"
-            style={{ backgroundColor: '#0B6F73', fontSize: '10px' }}
+          <span
+            className="position-absolute top-0 start-0 m-3"
+            style={{
+              backgroundColor: '#0B6F73',
+              color: '#fff',
+              fontSize: '11px',
+              fontWeight: 600,
+              padding: '4px 10px',
+              letterSpacing: '0.5px'
+            }}
           >
             {discount}% OFF
           </span>
         )}
         <button
           onClick={toggleWishlist}
-          className="btn position-absolute top-0 end-0 m-2 p-0 d-flex align-items-center justify-content-center"
+          className="btn position-absolute top-0 end-0 m-3 p-0 d-flex align-items-center justify-content-center"
           style={{
-            width: 36,
-            height: 36,
+            width: 38,
+            height: 38,
             borderRadius: '50%',
             background: '#fff',
             border: 'none',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-            transition: 'transform 0.2s ease'
+            boxShadow: '0 2px 10px rgba(0,0,0,0.12)',
+            transition: 'all 0.3s ease'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
           <i
@@ -98,15 +112,17 @@ export default function ProductCard({ product }) {
         </button>
       </div>
       <div className="card-body p-3">
+        <p className="text-muted mb-1" style={{ fontSize: '11px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+          {product.category}
+        </p>
         <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
-          <h6 className="card-title mb-1" style={{ fontSize: '14px', fontWeight: 600 }}>{product.name}</h6>
+          <h6 className="card-title mb-2" style={{ fontSize: '15px', fontWeight: 600, lineHeight: 1.3 }}>{product.name}</h6>
         </Link>
-        <p className="text-muted small mb-2" style={{ fontSize: '12px' }}>{product.category}</p>
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center mb-2">
           <div>
-            <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '15px' }}>₹{product.price}</span>
+            <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '17px' }}>₹{product.price}</span>
             {product.originalPrice && (
-              <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '12px' }}>
+              <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '13px' }}>
                 ₹{product.originalPrice}
               </span>
             )}
@@ -115,21 +131,22 @@ export default function ProductCard({ product }) {
         <button
           onClick={handleAddToCart}
           disabled={isAdding}
-          className="btn btn-sm w-100 mt-2 rounded-0"
-          style={{ 
-            backgroundColor: showMessage ? '#28a745' : '#0B6F73', 
+          className="btn btn-sm w-100 rounded-0 fw-semibold"
+          style={{
+            backgroundColor: showMessage ? '#28a745' : '#0B6F73',
             color: 'white',
             fontSize: '12px',
-            padding: '8px 0',
-            transition: 'background-color 0.3s ease'
+            padding: '10px 0',
+            letterSpacing: '1px',
+            transition: 'all 0.3s ease'
           }}
         >
           {isAdding ? (
             <span className="spinner-border spinner-border-sm"></span>
           ) : showMessage ? (
-            <><i className="bi bi-check me-1"></i>Added!</>
+            <><i className="bi bi-check me-1"></i>ADDED</>
           ) : (
-            'Add to Cart'
+            'ADD TO CART'
           )}
         </button>
       </div>

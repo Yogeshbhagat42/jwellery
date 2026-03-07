@@ -16,51 +16,112 @@ export default function Footer() {
 
   return (
     <footer style={{ fontFamily: "Poppins, sans-serif" }}>
+      {/* Newsletter Banner */}
+      <div style={{ backgroundColor: '#0B6F73', padding: '50px 0' }}>
+        <div className="container">
+          <div className="row align-items-center">
+            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
+              <h5 className="fw-bold text-white mb-1" style={{ fontSize: '20px', letterSpacing: '1px' }}>
+                Stay in the Loop
+              </h5>
+              <p className="mb-0" style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>
+                Subscribe for exclusive deals and new arrivals
+              </p>
+            </div>
+            <div className="col-md-6">
+              <form onSubmit={handleSubscribe}>
+                <div className="d-flex gap-2 justify-content-center justify-content-md-end">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="form-control rounded-0 border-0"
+                    style={{
+                      fontSize: '14px',
+                      backgroundColor: 'rgba(255,255,255,0.15)',
+                      color: '#fff',
+                      padding: '12px 16px',
+                      maxWidth: '320px',
+                      backdropFilter: 'blur(10px)'
+                    }}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="btn rounded-0 text-white px-4 fw-semibold"
+                    style={{
+                      backgroundColor: '#fff',
+                      color: '#0B6F73',
+                      fontSize: '13px',
+                      letterSpacing: '1px'
+                    }}
+                  >
+                    SUBSCRIBE
+                  </button>
+                </div>
+                {subscribed && (
+                  <p className="mt-2 mb-0 text-end" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)' }}>
+                    Thank you for subscribing!
+                  </p>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Footer */}
-      <div style={{ backgroundColor: '#1a1a1a', color: '#ccc', paddingTop: '50px', paddingBottom: '30px' }}>
+      <div style={{ backgroundColor: '#fafafa', color: '#555', padding: '60px 0 40px', borderTop: '1px solid #eee' }}>
         <div className="container">
           <div className="row">
             {/* Brand Section */}
             <div className="col-12 col-md-3 mb-4">
               <Link to="/" className="text-decoration-none">
-                <h4 className="fw-bold mb-3" style={{ color: '#fff', letterSpacing: '2px' }}>RIVAAH</h4>
+                <h4 className="fw-bold mb-2" style={{ color: '#0B6F73', letterSpacing: '3px', fontFamily: 'Georgia, serif' }}>RIVAAH</h4>
               </Link>
-              <p style={{ fontSize: '13px', lineHeight: '1.7', color: '#999' }}>
+              <p className="mb-1" style={{ fontSize: '10px', color: '#999', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                Fine Silver Jewellery
+              </p>
+              <p className="mt-3" style={{ fontSize: '13px', lineHeight: '1.8', color: '#777' }}>
                 Crafting timeless jewellery that celebrates every moment.
-                Each piece is designed with love and precision to add sparkle to your life.
+                Each piece is designed with love and precision.
               </p>
               <div className="d-flex gap-3 mt-3">
-                <a href="#" className="text-decoration-none" style={{ color: '#999', transition: 'color 0.2s' }}
-                   onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                   onMouseLeave={e => e.target.style.color = '#999'}>
-                  <i className="bi bi-facebook" style={{ fontSize: '18px' }}></i>
-                </a>
-                <a href="#" className="text-decoration-none" style={{ color: '#999' }}
-                   onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                   onMouseLeave={e => e.target.style.color = '#999'}>
-                  <i className="bi bi-instagram" style={{ fontSize: '18px' }}></i>
-                </a>
-                <a href="#" className="text-decoration-none" style={{ color: '#999' }}
-                   onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                   onMouseLeave={e => e.target.style.color = '#999'}>
-                  <i className="bi bi-twitter-x" style={{ fontSize: '18px' }}></i>
-                </a>
-                <a href="#" className="text-decoration-none" style={{ color: '#999' }}
-                   onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                   onMouseLeave={e => e.target.style.color = '#999'}>
-                  <i className="bi bi-pinterest" style={{ fontSize: '18px' }}></i>
-                </a>
-                <a href="#" className="text-decoration-none" style={{ color: '#999' }}
-                   onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                   onMouseLeave={e => e.target.style.color = '#999'}>
-                  <i className="bi bi-youtube" style={{ fontSize: '18px' }}></i>
-                </a>
+                {[
+                  { icon: 'bi-facebook', label: 'Facebook' },
+                  { icon: 'bi-instagram', label: 'Instagram' },
+                  { icon: 'bi-twitter-x', label: 'Twitter' },
+                  { icon: 'bi-pinterest', label: 'Pinterest' },
+                  { icon: 'bi-youtube', label: 'YouTube' }
+                ].map((social) => (
+                  <a key={social.icon} href="#" className="text-decoration-none d-flex align-items-center justify-content-center"
+                     style={{
+                       width: '36px', height: '36px', borderRadius: '50%',
+                       border: '1px solid #ddd', color: '#777',
+                       transition: 'all 0.3s ease'
+                     }}
+                     onMouseEnter={e => {
+                       e.currentTarget.style.backgroundColor = '#0B6F73';
+                       e.currentTarget.style.borderColor = '#0B6F73';
+                       e.currentTarget.style.color = '#fff';
+                     }}
+                     onMouseLeave={e => {
+                       e.currentTarget.style.backgroundColor = 'transparent';
+                       e.currentTarget.style.borderColor = '#ddd';
+                       e.currentTarget.style.color = '#777';
+                     }}
+                     aria-label={social.label}
+                  >
+                    <i className={`bi ${social.icon}`} style={{ fontSize: '14px' }}></i>
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Shop Categories */}
+            {/* Shop Links */}
             <div className="col-6 col-md-2 mb-4">
-              <h6 className="fw-bold mb-3" style={{ color: '#fff', fontSize: '13px', letterSpacing: '1px' }}>SHOP</h6>
+              <h6 className="fw-bold mb-3" style={{ color: '#333', fontSize: '13px', letterSpacing: '1px' }}>SHOP</h6>
               <ul className="list-unstyled" style={{ fontSize: '13px' }}>
                 {[
                   { label: 'Rings', cat: 'Rings' },
@@ -74,9 +135,9 @@ export default function Footer() {
                 ].map((item) => (
                   <li key={item.cat} className="mb-2">
                     <Link to={`/shop?category=${item.cat}`} className="text-decoration-none"
-                          style={{ color: '#999', transition: 'color 0.2s' }}
-                          onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                          onMouseLeave={e => e.target.style.color = '#999'}>
+                          style={{ color: '#777', transition: 'all 0.2s' }}
+                          onMouseEnter={e => { e.target.style.color = '#0B6F73'; e.target.style.paddingLeft = '4px'; }}
+                          onMouseLeave={e => { e.target.style.color = '#777'; e.target.style.paddingLeft = '0'; }}>
                       {item.label}
                     </Link>
                   </li>
@@ -84,119 +145,71 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Customer Service */}
+            {/* Help Links */}
             <div className="col-6 col-md-2 mb-4">
-              <h6 className="fw-bold mb-3" style={{ color: '#fff', fontSize: '13px', letterSpacing: '1px' }}>HELP</h6>
+              <h6 className="fw-bold mb-3" style={{ color: '#333', fontSize: '13px', letterSpacing: '1px' }}>HELP</h6>
               <ul className="list-unstyled" style={{ fontSize: '13px' }}>
-                <li className="mb-2">
-                  <Link to="/shipping" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Shipping & Delivery
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/returns" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Returns & Exchanges
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/faq" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    FAQ
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/contact" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Contact Us
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/track-order" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Track Order
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/jewelry-care" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Jewellery Care
-                  </Link>
-                </li>
-                <li className="mb-2">
-                  <Link to="/privacy" className="text-decoration-none" style={{ color: '#999' }}
-                        onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                        onMouseLeave={e => e.target.style.color = '#999'}>
-                    Privacy Policy
-                  </Link>
-                </li>
+                {[
+                  { label: 'Shipping & Delivery', to: '/shipping' },
+                  { label: 'Returns & Exchanges', to: '/returns' },
+                  { label: 'FAQ', to: '/faq' },
+                  { label: 'Contact Us', to: '/contact' },
+                  { label: 'Track Order', to: '/track-order' },
+                  { label: 'Jewellery Care', to: '/jewelry-care' },
+                  { label: 'Privacy Policy', to: '/privacy' },
+                ].map((item) => (
+                  <li key={item.to} className="mb-2">
+                    <Link to={item.to} className="text-decoration-none"
+                          style={{ color: '#777', transition: 'all 0.2s' }}
+                          onMouseEnter={e => { e.target.style.color = '#0B6F73'; e.target.style.paddingLeft = '4px'; }}
+                          onMouseLeave={e => { e.target.style.color = '#777'; e.target.style.paddingLeft = '0'; }}>
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Contact & Newsletter */}
+            {/* Contact Info */}
             <div className="col-12 col-md-5 mb-4">
               <div className="row">
-                {/* Contact Info */}
                 <div className="col-12 col-sm-6 mb-4 mb-sm-0">
-                  <h6 className="fw-bold mb-3" style={{ color: '#fff', fontSize: '13px', letterSpacing: '1px' }}>REACH US</h6>
+                  <h6 className="fw-bold mb-3" style={{ color: '#333', fontSize: '13px', letterSpacing: '1px' }}>REACH US</h6>
                   <div style={{ fontSize: '13px' }}>
-                    <p className="mb-2" style={{ color: '#999' }}>
+                    <p className="mb-2 d-flex align-items-center" style={{ color: '#777' }}>
                       <i className="bi bi-telephone me-2" style={{ color: '#0B6F73' }}></i>
                       011 43078430
                     </p>
-                    <p className="mb-2" style={{ color: '#999' }}>
+                    <p className="mb-2 d-flex align-items-center" style={{ color: '#777' }}>
                       <i className="bi bi-clock me-2" style={{ color: '#0B6F73' }}></i>
                       Mon-Sat | 9:30am - 6:30pm
                     </p>
-                    <p className="mb-2">
+                    <p className="mb-2 d-flex align-items-center">
                       <i className="bi bi-envelope me-2" style={{ color: '#0B6F73' }}></i>
-                      <a href="mailto:care@marchjewellery.com" className="text-decoration-none" style={{ color: '#999' }}
+                      <a href="mailto:care@marchjewellery.com" className="text-decoration-none" style={{ color: '#777' }}
                          onMouseEnter={e => e.target.style.color = '#0B6F73'}
-                         onMouseLeave={e => e.target.style.color = '#999'}>
+                         onMouseLeave={e => e.target.style.color = '#777'}>
                         care@marchjewellery.com
                       </a>
                     </p>
                   </div>
                 </div>
 
-                {/* Newsletter */}
                 <div className="col-12 col-sm-6">
-                  <h6 className="fw-bold mb-3" style={{ color: '#fff', fontSize: '13px', letterSpacing: '1px' }}>NEWSLETTER</h6>
-                  <p style={{ fontSize: '12px', color: '#999' }}>
-                    Subscribe for exclusive deals and new arrivals.
-                  </p>
-                  <form onSubmit={handleSubscribe}>
-                    <div className="input-group">
-                      <input
-                        type="email"
-                        placeholder="Your email"
-                        className="form-control rounded-0 border-0"
-                        style={{ fontSize: '12px', backgroundColor: '#2a2a2a', color: '#fff' }}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                      <button
-                        type="submit"
-                        className="btn rounded-0 text-white px-3"
-                        style={{ backgroundColor: '#0B6F73', fontSize: '11px', letterSpacing: '1px' }}
-                      >
-                        <i className="bi bi-arrow-right"></i>
-                      </button>
-                    </div>
-                    {subscribed && (
-                      <p className="mt-2 mb-0" style={{ fontSize: '11px', color: '#0B6F73' }}>
-                        Thank you for subscribing!
-                      </p>
-                    )}
-                  </form>
+                  <h6 className="fw-bold mb-3" style={{ color: '#333', fontSize: '13px', letterSpacing: '1px' }}>WE PROMISE</h6>
+                  <div className="d-flex flex-column gap-2">
+                    {[
+                      { icon: 'bi-shield-check', text: 'Secure Payment' },
+                      { icon: 'bi-truck', text: 'Free Shipping' },
+                      { icon: 'bi-arrow-return-left', text: 'Easy Returns' },
+                      { icon: 'bi-gem', text: 'Certified Purity' }
+                    ].map((item) => (
+                      <div key={item.icon} className="d-flex align-items-center gap-2">
+                        <i className={`bi ${item.icon}`} style={{ color: '#0B6F73', fontSize: '16px' }}></i>
+                        <span style={{ fontSize: '13px', color: '#777' }}>{item.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -205,54 +218,30 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div style={{ backgroundColor: '#111', padding: '20px 0' }}>
+      <div style={{ backgroundColor: '#f0f0f0', padding: '18px 0', borderTop: '1px solid #e5e5e5' }}>
         <div className="container">
           <div className="row align-items-center">
-            {/* Trust Badges */}
-            <div className="col-12 col-md-4 mb-3 mb-md-0">
-              <div className="d-flex gap-4 justify-content-center justify-content-md-start">
-                <div className="text-center">
-                  <i className="bi bi-shield-check" style={{ color: '#0B6F73', fontSize: '20px' }}></i>
-                  <p className="mb-0" style={{ fontSize: '10px', color: '#999' }}>Secure Payment</p>
-                </div>
-                <div className="text-center">
-                  <i className="bi bi-truck" style={{ color: '#0B6F73', fontSize: '20px' }}></i>
-                  <p className="mb-0" style={{ fontSize: '10px', color: '#999' }}>Free Shipping</p>
-                </div>
-                <div className="text-center">
-                  <i className="bi bi-arrow-return-left" style={{ color: '#0B6F73', fontSize: '20px' }}></i>
-                  <p className="mb-0" style={{ fontSize: '10px', color: '#999' }}>Easy Returns</p>
-                </div>
-                <div className="text-center">
-                  <i className="bi bi-gem" style={{ color: '#0B6F73', fontSize: '20px' }}></i>
-                  <p className="mb-0" style={{ fontSize: '10px', color: '#999' }}>Certified</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Copyright */}
-            <div className="col-12 col-md-4 mb-3 mb-md-0 text-center">
-              <p className="mb-0" style={{ fontSize: '11px', color: '#666' }}>
+            <div className="col-12 col-md-6 mb-2 mb-md-0 text-center text-md-start">
+              <p className="mb-0" style={{ fontSize: '12px', color: '#999' }}>
                 &copy; {new Date().getFullYear()} RIVAAH Jewellery. All Rights Reserved.
               </p>
             </div>
-
-            {/* Payment Methods */}
-            <div className="col-12 col-md-4">
+            <div className="col-12 col-md-6">
               <div className="d-flex gap-2 justify-content-center justify-content-md-end align-items-center">
-                <span style={{ fontSize: '10px', color: '#666', marginRight: '8px' }}>We Accept:</span>
+                <span style={{ fontSize: '11px', color: '#999', marginRight: '8px' }}>We Accept:</span>
                 {['VISA', 'MC', 'UPI', 'RuPay'].map((method) => (
                   <span
                     key={method}
                     className="d-inline-flex align-items-center justify-content-center"
                     style={{
-                      fontSize: '9px',
+                      fontSize: '10px',
                       fontWeight: 700,
-                      color: '#999',
-                      border: '1px solid #333',
+                      color: '#777',
+                      border: '1px solid #ddd',
                       borderRadius: '3px',
-                      padding: '3px 8px',
-                      letterSpacing: '0.5px'
+                      padding: '3px 10px',
+                      letterSpacing: '0.5px',
+                      backgroundColor: '#fff'
                     }}
                   >
                     {method}

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from "./components/Navbar";
-import Category from "./components/Category";
+import Category, { BrandPromise, GiftSection, WhyChoose } from "./components/Category";
 import Footer from "./components/Footer";
 import Products from "./components/Products";
 import ShopPage from "./components/ShopPage";
@@ -38,6 +38,9 @@ function App() {
                   <>
                     <Category />
                     <Products />
+                    <BrandPromise />
+                    <GiftSection />
+                    <WhyChoose />
                   </>
                 } />
                 <Route path="/shop" element={<ShopPage />} />
