@@ -132,6 +132,8 @@ router.get("/me", verifyToken, async (req, res) => {
 // ============== DASHBOARD STATS ==============
 router.get("/stats", verifyToken, async (req, res) => {
   try {
+    const Product = require("../models/productModel");
+
     const totalOrders = await Order.countDocuments();
     const totalCustomers = await User.countDocuments({ role: 'user' });
     const revenueResult = await Order.aggregate([
@@ -145,6 +147,45 @@ router.get("/stats", verifyToken, async (req, res) => {
       .limit(5)
       .populate('userId', 'name email');
 
+    // Orders grouped by status
+    const statusAgg = await Order.aggregate([
+      { $group: { _id: '$orderStatus', count: { $sum: 1 } } }
+    ]);
+    const ordersByStatus = {};
+    statusAgg.forEach(s => { ordersByStatus[s._id] = s.count; });
+
+    // Monthly revenue for last 6 months
+    const now = new Date();
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+    const monthlyAgg = await Order.aggregate([
+      { $match: { orderStatus: { $ne: 'Cancelled' }, createdAt: { $gte: sixMonthsAgo } } },
+      { $group: {
+          _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+          revenue: { $sum: '$totalAmount' },
+          count: { $sum: 1 }
+      }},
+      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    ]);
+
+    // Build arrays for last 6 months (fill 0 for months with no orders)
+    const monthlyRevenue = [];
+    const monthlyOrders = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const found = monthlyAgg.find(item => item._id.year === y && item._id.month === m);
+      monthlyRevenue.push(found ? found.revenue : 0);
+      monthlyOrders.push(found ? found.count : 0);
+    }
+
+    // Category stats (product count per category)
+    const categoryStats = await Product.aggregate([
+      { $group: { _id: '$category', count: { $sum: 1 } } },
+      { $project: { category: '$_id', count: 1, _id: 0 } },
+      { $sort: { count: -1 } }
+    ]);
+
     res.json({
       success: true,
       stats: {
@@ -152,7 +193,11 @@ router.get("/stats", verifyToken, async (req, res) => {
         totalRevenue,
         totalCustomers,
         pendingOrders,
-        recentOrders
+        recentOrders,
+        ordersByStatus,
+        monthlyRevenue,
+        monthlyOrders,
+        categoryStats
       }
     });
   } catch (error) {

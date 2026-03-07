@@ -16,8 +16,8 @@ const Products = () => {
     setLoading(true);
     
     try {
-      const response = await getProducts();
-      setProducts(response.data || []);
+      const data = await getProducts();
+      setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching products:", error);
       setProducts([]);

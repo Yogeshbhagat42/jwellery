@@ -40,6 +40,7 @@ const Dashboard = () => {
     recentOrders: [],
     ordersByStatus: {},
     monthlyRevenue: [],
+    monthlyOrders: [],
     categoryStats: []
   });
   const [loading, setLoading] = useState(true);
@@ -93,7 +94,7 @@ const Dashboard = () => {
         label: 'Revenue',
         data: stats.monthlyRevenue?.length > 0 
           ? stats.monthlyRevenue 
-          : [25000, 42000, 35000, 58000, 72000, stats.totalRevenue || 85000],
+          : [0, 0, 0, 0, 0, 0],
         fill: true,
         backgroundColor: 'rgba(11, 111, 115, 0.1)',
         borderColor: '#0B6F73',
@@ -145,7 +146,9 @@ const Dashboard = () => {
     datasets: [
       {
         label: 'Orders',
-        data: [12, 19, 15, 25, 32, stats.totalOrders || 28],
+        data: stats.monthlyOrders?.length > 0 
+          ? stats.monthlyOrders 
+          : [0, 0, 0, 0, 0, 0],
         backgroundColor: 'rgba(11, 111, 115, 0.8)',
         borderRadius: 8,
         borderSkipped: false,
@@ -182,11 +185,11 @@ const Dashboard = () => {
     datasets: [
       {
         data: [
-          stats.ordersByStatus?.Pending || stats.pendingOrders || 5,
-          stats.ordersByStatus?.Confirmed || 8,
-          stats.ordersByStatus?.Shipped || 12,
-          stats.ordersByStatus?.Delivered || 25,
-          stats.ordersByStatus?.Cancelled || 3
+          stats.ordersByStatus?.Pending || 0,
+          stats.ordersByStatus?.Confirmed || 0,
+          stats.ordersByStatus?.Shipped || 0,
+          stats.ordersByStatus?.Delivered || 0,
+          stats.ordersByStatus?.Cancelled || 0
         ],
         backgroundColor: [
           '#ffc107',
@@ -222,7 +225,9 @@ const Dashboard = () => {
   };
 
   // Category Distribution
-  const categoryLabels = ['Rings', 'Earrings', 'Necklace', 'Bracelets', 'Anklets', 'Others'];
+  const categoryLabels = stats.categoryStats?.length > 0 
+    ? stats.categoryStats.map(c => c.category) 
+    : ['No Data'];
   const categoryData = {
     labels: categoryLabels,
     datasets: [
@@ -230,7 +235,7 @@ const Dashboard = () => {
         label: 'Products',
         data: stats.categoryStats?.length > 0 
           ? stats.categoryStats.map(c => c.count)
-          : [15, 22, 18, 12, 8, 10],
+          : [0],
         backgroundColor: [
           'rgba(11, 111, 115, 0.9)',
           'rgba(11, 111, 115, 0.75)',
