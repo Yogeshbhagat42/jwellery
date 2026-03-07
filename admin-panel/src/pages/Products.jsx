@@ -14,14 +14,12 @@ const Products = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    console.log("🔄 Fetching products...");
     
     try {
       const response = await getProducts();
-      console.log("✅ Products fetched:", response.data);
       setProducts(response.data || []);
     } catch (error) {
-      console.error("❌ Error fetching products:", error);
+      console.error("Error fetching products:", error);
       setProducts([]);
     } finally {
       setLoading(false);
@@ -40,74 +38,61 @@ const Products = () => {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: "60vh" }}>
         <div className="text-center">
-          <div className="spinner-border text-dark" style={{ width: "2rem", height: "2rem" }}>
+          <div className="spinner-border" style={{ width: "2rem", height: "2rem", color: '#0B6F73' }}>
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="mt-2 fw-semibold text-dark" style={{ fontSize: "14px" }}>Loading products...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container-fluid px-3 py-3">
+    <div className="container-fluid px-4 py-4" style={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
       {/* Header */}
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 p-3 bg-white rounded border">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div className="mb-2 mb-md-0">
-          <h5 className="fw-semibold mb-0" style={{ color: "#000000", fontSize: "16px" }}>
-            💎 Products
-          </h5>
-          <small className="text-muted" style={{ fontSize: "12px" }}>Manage your jewelry collection</small>
+          <h4 className="fw-bold mb-1" style={{ color: "#1a1a1a" }}>Product Catalog</h4>
+          <p className="text-muted mb-0" style={{ fontSize: "14px" }}>
+            {products.length} {products.length === 1 ? 'item' : 'items'} in your collection
+          </p>
         </div>
         
         <div className="d-flex gap-2">
           <button 
-            className="btn btn-outline-dark btn-sm border"
+            className="btn btn-outline-secondary btn-sm px-3"
             onClick={handleRefresh}
-            style={{ fontSize: "12px" }}
+            style={{ fontSize: "13px", borderRadius: '6px' }}
           >
-            🔄 Refresh
+            <i className="bi bi-arrow-clockwise me-1"></i> Refresh
           </button>
           
           <button 
-            className="btn btn-dark btn-sm"
+            className="btn btn-sm px-3"
             onClick={handleAddProduct}
-            style={{ fontSize: "12px" }}
+            style={{ fontSize: "13px", borderRadius: '6px', backgroundColor: '#0B6F73', color: '#fff' }}
           >
-            ✨ Add New
+            <i className="bi bi-plus-lg me-1"></i> Add Product
           </button>
-        </div>
-      </div>
-      
-      {/* Stats */}
-      <div className="mb-3">
-        <div className="d-flex align-items-center gap-2">
-          <span className="badge bg-light text-dark border" style={{ fontSize: "12px" }}>
-            Total: <span className="fw-semibold">{products.length}</span>
-          </span>
-          <span className="badge bg-light text-dark border" style={{ fontSize: "12px" }}>
-            Active: <span className="fw-semibold">{products.length}</span>
-          </span>
         </div>
       </div>
       
       {/* Products Grid */}
       {products.length === 0 ? (
-        <div className="card border-0 shadow-sm">
-          <div className="card-body p-4 text-center">
-            <div className="mb-3" style={{ fontSize: "40px", color: "#E8E8E8" }}>💎</div>
-            <h6 className="fw-semibold mb-2" style={{ color: "#000000", fontSize: "15px" }}>
-              No products found
-            </h6>
-            <p className="text-muted mb-3" style={{ fontSize: "13px" }}>
-              Start building your jewelry collection
+        <div className="card border-0 shadow-sm" style={{ borderRadius: '12px' }}>
+          <div className="card-body p-5 text-center">
+            <div className="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-4" style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #0B6F73 0%, #0d8a8f 100%)' }}>
+              <i className="bi bi-gem text-white" style={{ fontSize: "32px" }}></i>
+            </div>
+            <h5 className="fw-semibold mb-2">Start Your Collection</h5>
+            <p className="text-muted mb-4" style={{ fontSize: "14px", maxWidth: '400px', margin: '0 auto' }}>
+              Add your first jewellery product to begin building your beautiful collection
             </p>
             <button 
-              className="btn btn-dark btn-sm"
+              className="btn px-4 py-2"
               onClick={handleAddProduct}
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: "14px", borderRadius: '6px', backgroundColor: '#0B6F73', color: '#fff' }}
             >
-              ✨ Add First Product
+              <i className="bi bi-plus-lg me-2"></i>Add First Product
             </button>
           </div>
         </div>

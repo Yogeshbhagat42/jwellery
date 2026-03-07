@@ -37,29 +37,59 @@ export default function ProductCard({ product }) {
     }
   };
 
+  const discount = product.originalPrice 
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : 50;
+
   return (
-    <div className="card h-100 border-0 shadow-sm">
+    <div 
+      className="card h-100 border-0"
+      style={{ 
+        backgroundColor: '#fff',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-5px)';
+        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+      }}
+    >
       <div className="position-relative">
         <Link to={`/product/${product._id}`}>
           <img
             src={product.images?.[0] || '/placeholder.jpg'}
             className="card-img-top"
             alt={product.name}
-            style={{ height: '250px', objectFit: 'cover' }}
+            style={{ height: '220px', objectFit: 'cover' }}
             onError={(e) => { e.target.src = '/placeholder.jpg'; }}
           />
         </Link>
+        {discount > 0 && (
+          <span 
+            className="position-absolute top-0 start-0 m-2 badge"
+            style={{ backgroundColor: '#0B6F73', fontSize: '10px' }}
+          >
+            {discount}% OFF
+          </span>
+        )}
         <button
           onClick={toggleWishlist}
           className="btn position-absolute top-0 end-0 m-2 p-0 d-flex align-items-center justify-content-center"
           style={{
-            width: 34,
-            height: 34,
+            width: 36,
+            height: 36,
             borderRadius: '50%',
-            background: 'rgba(255,255,255,0.9)',
+            background: '#fff',
             border: 'none',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            transition: 'transform 0.2s ease'
           }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
           <i
             className={`bi ${wishlisted ? 'bi-heart-fill' : 'bi-heart'}`}
@@ -67,27 +97,41 @@ export default function ProductCard({ product }) {
           ></i>
         </button>
       </div>
-      <div className="card-body">
+      <div className="card-body p-3">
         <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
-          <h6 className="card-title">{product.name}</h6>
+          <h6 className="card-title mb-1" style={{ fontSize: '14px', fontWeight: 600 }}>{product.name}</h6>
         </Link>
-        <p className="text-secondary small mb-2">{product.category}</p>
+        <p className="text-muted small mb-2" style={{ fontSize: '12px' }}>{product.category}</p>
         <div className="d-flex justify-content-between align-items-center">
-          <span className="fw-bold">{'\u20B9'}{product.price}</span>
-          <button
-            onClick={handleAddToCart}
-            disabled={isAdding}
-            className="btn btn-sm"
-            style={{ backgroundColor: '#0B6F73', color: 'white' }}
-          >
-            {isAdding ? 'Adding...' : 'Add to Cart'}
-          </button>
-        </div>
-        {showMessage && (
-          <div className="alert alert-success mt-2 py-1 small text-center">
-            Added to cart!
+          <div>
+            <span className="fw-bold" style={{ color: '#0B6F73', fontSize: '15px' }}>₹{product.price}</span>
+            {product.originalPrice && (
+              <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '12px' }}>
+                ₹{product.originalPrice}
+              </span>
+            )}
           </div>
-        )}
+        </div>
+        <button
+          onClick={handleAddToCart}
+          disabled={isAdding}
+          className="btn btn-sm w-100 mt-2 rounded-0"
+          style={{ 
+            backgroundColor: showMessage ? '#28a745' : '#0B6F73', 
+            color: 'white',
+            fontSize: '12px',
+            padding: '8px 0',
+            transition: 'background-color 0.3s ease'
+          }}
+        >
+          {isAdding ? (
+            <span className="spinner-border spinner-border-sm"></span>
+          ) : showMessage ? (
+            <><i className="bi bi-check me-1"></i>Added!</>
+          ) : (
+            'Add to Cart'
+          )}
+        </button>
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ function App() {
       <CartProvider>
         <WishlistProvider>
           <Router>
-            <div style={{ backgroundColor: '#E8E8E8', minHeight: '100vh' }}>
+            <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
               <Navbar />
               <Routes>
                 <Route path="/" element={

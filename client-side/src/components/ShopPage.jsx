@@ -104,75 +104,70 @@ export default function ShopPage() {
   };
 
   return (
-    <div className="container py-4">
-      <h4 className="text-center mb-4" style={{ color: "#0B6F73" }}>
-        {getCategoryDisplayName()} 
-        {products.length > 0 && ` (${products.length})`}
-      </h4>
+    <div style={{ backgroundColor: '#fff', minHeight: '80vh' }}>
+      <div className="container py-4">
+        <h4 className="text-center mb-2" style={{ color: "#0B6F73", fontSize: '20px', fontWeight: 600 }}>
+          {getCategoryDisplayName()}
+        </h4>
+        <p className="text-center text-muted mb-4" style={{ fontSize: '14px' }}>
+          {products.length > 0 ? `${products.length} ${products.length === 1 ? 'product' : 'products'} found` : 'Browse our collection'}
+        </p>
 
-      {/* Filters Bar */}
-      {!loading && allProducts.length > 0 && (
-        <div className="bg-white p-3 shadow-sm mb-4">
-          <div className="row g-3 align-items-center">
-            <div className="col-auto">
-              <span className="small fw-semibold" style={{ color: '#0B6F73' }}>Filters:</span>
-            </div>
-            <div className="col-auto">
-              <select
-                className="form-select form-select-sm rounded-0"
-                value={priceFilter}
-                onChange={(e) => setPriceFilter(e.target.value)}
-                style={{ borderColor: '#0B6F73', minWidth: '160px' }}
-              >
-                <option value="">All Prices</option>
-                <option value="500">Under ₹500</option>
-                <option value="1000">Under ₹1,000</option>
-                <option value="2000">Under ₹2,000</option>
-                <option value="5000">Under ₹5,000</option>
-                <option value="10000">Under ₹10,000</option>
-              </select>
-            </div>
-            <div className="col-auto">
-              <select
-                className="form-select form-select-sm rounded-0"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                style={{ borderColor: '#0B6F73', minWidth: '160px' }}
-              >
-                <option value="">Default Sort</option>
-                <option value="price_low">Price: Low to High</option>
-                <option value="price_high">Price: High to Low</option>
-                <option value="name">Name: A to Z</option>
-                <option value="newest">Newest First</option>
-              </select>
-            </div>
-            {(priceFilter || sortBy) && (
+        {/* Filters Bar */}
+        {!loading && allProducts.length > 0 && (
+          <div className="p-3 mb-4" style={{ backgroundColor: '#fafafa', border: '1px solid #eee' }}>
+            <div className="row g-3 align-items-center">
               <div className="col-auto">
-                <button
-                  className="btn btn-sm btn-outline-secondary rounded-0"
-                  onClick={() => { setPriceFilter(''); setSortBy(''); }}
+                <span className="small fw-semibold" style={{ color: '#0B6F73' }}>Filters:</span>
+              </div>
+              <div className="col-auto">
+                <select
+                  className="form-select form-select-sm rounded-0"
+                  value={priceFilter}
+                  onChange={(e) => setPriceFilter(e.target.value)}
+                  style={{ borderColor: '#0B6F73', minWidth: '160px' }}
                 >
-                  <i className="bi bi-x-lg me-1"></i>Clear Filters
-                </button>
+                  <option value="">All Prices</option>
+                  <option value="500">Under ₹500</option>
+                  <option value="1000">Under ₹1,000</option>
+                  <option value="2000">Under ₹2,000</option>
+                  <option value="5000">Under ₹5,000</option>
+                  <option value="10000">Under ₹10,000</option>
+                </select>
               </div>
-            )}
-            {priceFilter && (
               <div className="col-auto">
-                <span className="badge" style={{ backgroundColor: '#0B6F73' }}>
-                  {products.length} of {allProducts.length} products
-                </span>
+                <select
+                  className="form-select form-select-sm rounded-0"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{ borderColor: '#0B6F73', minWidth: '160px' }}
+                >
+                  <option value="">Default Sort</option>
+                  <option value="price_low">Price: Low to High</option>
+                  <option value="price_high">Price: High to Low</option>
+                  <option value="name">Name: A to Z</option>
+                  <option value="newest">Newest First</option>
+                </select>
               </div>
-            )}
+              {(priceFilter || sortBy) && (
+                <div className="col-auto">
+                  <button
+                    className="btn btn-sm btn-outline-secondary rounded-0"
+                    onClick={() => { setPriceFilter(''); setSortBy(''); }}
+                  >
+                    <i className="bi bi-x-lg me-1"></i>Clear
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       
       {loading ? (
         <div className="text-center py-5">
           <div className="spinner-border" style={{ color: "#0B6F73" }} role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p className="mt-2 small">Loading products...</p>
         </div>
       ) : error ? (
         <div className="text-center py-5">
@@ -189,36 +184,33 @@ export default function ShopPage() {
         </div>
       ) : products.length === 0 ? (
         <div className="text-center py-5">
-          <div className="alert alert-warning">
-            <h5>No Products Found</h5>
-            <p>
-              {categoryFromURL 
-                ? `No products found in "${getCategoryDisplayName()}" category`
-                : 'No products available'
-              }
-            </p>
-            <Link to="/" className="btn btn-sm mt-2" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
-              ← Back to Home
-            </Link>
+          <div className="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" 
+               style={{ width: '80px', height: '80px', backgroundColor: '#f8f9fa' }}>
+            <i className="bi bi-search" style={{ fontSize: '32px', color: '#ccc' }}></i>
           </div>
+          <h5 className="fw-semibold mb-2">No Products Found</h5>
+          <p className="text-muted mb-3" style={{ fontSize: '14px' }}>
+            {categoryFromURL 
+              ? `No products found in "${getCategoryDisplayName()}" category`
+              : 'No products available'
+            }
+          </p>
+          <Link to="/shop" className="btn btn-sm px-4" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
+            View All Products
+          </Link>
         </div>
       ) : (
         <>
-          <div className="row g-4">
+          <div className="row g-3">
             {products.map(product => (
-              <div key={product._id} className="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div key={product._id} className="col-6 col-md-4 col-lg-3">
                 <ProductCard product={product} />
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-4">
-            <Link to="/" className="btn" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
-              &larr; Back to Home
-            </Link>
-          </div>
         </>
       )}
+      </div>
     </div>
   );
 }

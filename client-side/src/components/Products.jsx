@@ -31,7 +31,7 @@ export default function Products() {
                  Math.round(((product.price * 2 - product.price) / (product.price * 2)) * 100)
       }));
 
-      setProducts(processedProducts.slice(0, 4)); // Show only 4 on homepage
+      setProducts(processedProducts.slice(0, 8)); // Show 8 on homepage
     } catch (err) {
       console.error('Error:', err);
     } finally {
@@ -55,94 +55,117 @@ export default function Products() {
   };
 
   return (
-    <div className="container py-5">
-      <h5 className="text-center mb-4" style={{ color: "#0B6F73" }}>New Arrivals</h5>
+    <div className="py-5" style={{ backgroundColor: '#fff' }}>
+      <div className="container">
+        <h5 className="text-center mb-2" style={{ color: "#0B6F73", fontSize: '18px', fontWeight: 600 }}>
+          New Arrivals
+        </h5>
+        <p className="text-center text-muted mb-4" style={{ fontSize: '14px' }}>
+          Discover our latest collection of stunning pieces
+        </p>
 
-      {loading ? (
-        <div className="text-center py-5">
-          <div className="spinner-border" style={{ color: "#0B6F73" }} role="status">
-            <span className="visually-hidden">Loading...</span>
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border" style={{ color: "#0B6F73" }} role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <>
-          {/* PRODUCTS GRID */}
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              overflowX: "auto",
-              paddingBottom: "10px",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            {products.map((p) => (
-              <div
-                key={p.id}
-                style={{
-                  minWidth: "280px",
-                  flexShrink: 0,
-                }}
-              >
-                <div className="card border-0 h-100 shadow-sm">
-                  <Link to={`/product/${p.id}`}>
-                    <img
-                      src={p.image}
-                      className="img-fluid"
-                      alt={p.name}
-                      style={{ height: '250px', objectFit: 'cover', width: '100%' }}
-                      onError={(e) => { e.target.src = '/placeholder.jpg'; }}
-                    />
-                  </Link>
+        ) : (
+          <>
+            {/* PRODUCTS GRID */}
+            <div className="row g-3">
+              {products.map((p) => (
+                <div key={p.id} className="col-6 col-md-4 col-lg-3">
+                  <div 
+                    className="card h-100 border-0"
+                    style={{ 
+                      backgroundColor: '#fff',
+                      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+                      transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-5px)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
+                    }}
+                  >
+                    <Link to={`/product/${p.id}`}>
+                      <img
+                        src={p.image}
+                        className="card-img-top"
+                        alt={p.name}
+                        style={{ height: '220px', objectFit: 'cover' }}
+                        onError={(e) => { e.target.src = '/placeholder.jpg'; }}
+                      />
+                    </Link>
 
-                  <div className="card-body p-3 d-flex flex-column justify-content-between bg-white">
-                    <div>
-                      <Link to={`/product/${p.id}`} className="text-decoration-none text-dark">
-                        <p className="small mb-1 fw-semibold">{p.name}</p>
-                      </Link>
+                    <div className="card-body p-3 d-flex flex-column justify-content-between">
+                      <div>
+                        <Link to={`/product/${p.id}`} className="text-decoration-none text-dark">
+                          <p className="mb-1 fw-semibold" style={{ fontSize: '14px' }}>{p.name}</p>
+                        </Link>
 
-                      <p className="small mb-2">
-                        <span className="fw-bold">₹{p.price}</span>{" "}
-                        <span className="text-muted text-decoration-line-through">
-                          ₹{p.oldPrice}
-                        </span>
-                        <span
-                          className="badge ms-2"
-                          style={{ backgroundColor: "#0B6F73", color: "#fff" }}
-                        >
-                          {p.discount}% OFF
-                        </span>
-                      </p>
+                        <p className="mb-2" style={{ fontSize: '13px' }}>
+                          <span className="fw-bold" style={{ color: '#0B6F73' }}>₹{p.price}</span>{" "}
+                          <span className="text-muted text-decoration-line-through">
+                            ₹{p.oldPrice}
+                          </span>
+                          <span
+                            className="badge ms-2"
+                            style={{ backgroundColor: "#0B6F73", color: "#fff", fontSize: '10px' }}
+                          >
+                            {p.discount}% OFF
+                          </span>
+                        </p>
+                      </div>
+
+                      <button
+                        className="btn w-100 btn-sm rounded-0"
+                        style={{ 
+                          backgroundColor: addedId === p.id ? "#28a745" : "#0B6F73", 
+                          color: "#fff",
+                          fontSize: '12px',
+                          padding: '8px 0',
+                          transition: 'background-color 0.3s ease'
+                        }}
+                        onClick={() => handleAddToCart(p)}
+                        disabled={addingId === p.id}
+                      >
+                        {addingId === p.id ? (
+                          <span className="spinner-border spinner-border-sm me-1"></span>
+                        ) : addedId === p.id ? (
+                          <><i className="bi bi-check me-1"></i>Added!</>
+                        ) : (
+                          'ADD TO CART'
+                        )}
+                      </button>
                     </div>
-
-                    <button
-                      className="btn w-100 btn-sm rounded-0"
-                      style={{ backgroundColor: "#0B6F73", color: "#fff" }}
-                      onClick={() => handleAddToCart(p)}
-                      disabled={addingId === p.id}
-                    >
-                      {addingId === p.id ? 'Adding...' : addedId === p.id ? 'Added!' : 'ADD TO CART'}
-                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* VIEW ALL BUTTON - Goes to ALL products (no category filter) */}
-          <div className="text-center mt-4">
-            <Link to="/shop">
-              <button
-                className="btn px-4 rounded-0"
-                style={{ backgroundColor: "#0B6F73", color: "#fff" }}
-              >
-                VIEW ALL PRODUCTS
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
+            {/* VIEW ALL BUTTON */}
+            <div className="text-center mt-5">
+              <Link to="/shop">
+                <button
+                  className="btn px-5 py-2 rounded-0 fw-semibold"
+                  style={{ 
+                    backgroundColor: "#0B6F73", 
+                    color: "#fff",
+                    fontSize: '14px'
+                  }}
+                >
+                  VIEW ALL PRODUCTS
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

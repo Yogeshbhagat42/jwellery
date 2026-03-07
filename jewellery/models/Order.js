@@ -9,6 +9,11 @@ const orderItemSchema = new mongoose.Schema({
 });
 
 const orderSchema = new mongoose.Schema({
+  orderId: { 
+    type: String, 
+    unique: true,
+    sparse: true // Allow multiple null values during migration
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   items: [orderItemSchema],
   shippingAddress: {
@@ -29,5 +34,15 @@ const orderSchema = new mongoose.Schema({
   },
   totalAmount: { type: Number, required: true }
 }, { timestamps: true });
+
+// Generate unique orderId before saving
+orderSchema.pre('save', async function(next) {
+  if (!this.orderId) {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+    this.orderId = `ORD-${timestamp}-${randomPart}`;
+  }
+  next();
+});
 
 module.exports = mongoose.model('Order', orderSchema);

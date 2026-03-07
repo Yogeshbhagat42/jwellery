@@ -299,12 +299,14 @@ export default function Navbar() {
       `}</style>
 
       {/* Top Banner */}
-      <div className="text-white text-center py-2 fw-semibold small" style={{ background: "#0B6F73" }}>
-        Clearance Sale : Minimum 70% OFF
+      <div className="text-white text-center py-2" style={{ background: "linear-gradient(90deg, #0B6F73 0%, #0a5a5d 100%)", fontSize: '12px', letterSpacing: '0.5px' }}>
+        <i className="bi bi-stars me-2"></i>
+        Clearance Sale: Flat 70% OFF on Selected Items | Free Shipping on Orders Above ₹999
+        <i className="bi bi-stars ms-2"></i>
       </div>
 
       {/* Main Navbar */}
-      <nav className="navbar navbar-light bg-white px-3 border-bottom">
+      <nav className="navbar navbar-light bg-white px-3 py-2" style={{ borderBottom: '1px solid #eee' }}>
         <button
           className="btn d-md-none"
           data-bs-toggle="offcanvas"
@@ -314,7 +316,24 @@ export default function Navbar() {
         </button>
 
         <Link className="navbar-brand fw-bold mx-auto mx-md-0" to="/">
-          <img src="/logo.png" alt="RIVAAH" height="45" />
+          <span style={{ 
+            fontFamily: 'Georgia, serif', 
+            fontSize: '28px', 
+            fontWeight: 700, 
+            color: '#0B6F73',
+            letterSpacing: '3px'
+          }}>
+            RIVAAH
+          </span>
+          <span style={{ 
+            display: 'block', 
+            fontSize: '9px', 
+            color: '#888', 
+            letterSpacing: '2px',
+            marginTop: '-4px'
+          }}>
+            FINE SILVER JEWELLERY
+          </span>
         </Link>
 
         {/* Search Bar */}

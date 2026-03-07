@@ -220,87 +220,163 @@ export default function Account() {
   if (!user) return null;
 
   return (
-    <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
-      {/* Invoice Modal */}
-      {invoiceOrder && (
-        <InvoiceModal order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />
-      )}
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
+      <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        {/* Invoice Modal */}
+        {invoiceOrder && (
+          <InvoiceModal order={invoiceOrder} onClose={() => setInvoiceOrder(null)} />
+        )}
 
-      <div className="row">
-        {/* Profile Card */}
-        <div className="col-md-4">
-          <div className="card border-0 shadow-sm mb-4">
-            <div className="card-body p-4">
-              <div className="text-center mb-3">
-                <div className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                  style={{ width: 60, height: 60, backgroundColor: '#0B6F73', color: 'white', fontSize: '24px' }}>
-                  {user.name?.charAt(0)?.toUpperCase()}
-                </div>
-              </div>
-              <h5 className="mb-3 text-center" style={{ color: "#0B6F73" }}>My Profile</h5>
-              <div className="mb-3">
-                <p className="mb-2"><i className="bi bi-person me-2" style={{ color: '#0B6F73' }}></i><strong>Name:</strong> {user.name}</p>
-                <p className="mb-2"><i className="bi bi-envelope me-2" style={{ color: '#0B6F73' }}></i><strong>Email:</strong> {user.email}</p>
-                {user.phone && <p className="mb-2"><i className="bi bi-phone me-2" style={{ color: '#0B6F73' }}></i><strong>Phone:</strong> {user.phone}</p>}
-              </div>
-              <button onClick={handleLogout} className="btn btn-outline-danger w-100 rounded-0">
-                <i className="bi bi-box-arrow-right me-2"></i>Logout
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="card border-0 shadow-sm mb-4">
-            <div className="card-body p-4">
-              <h6 className="mb-3" style={{ color: "#0B6F73" }}>Order Summary</h6>
-              <div className="d-flex justify-content-between mb-2">
-                <span className="text-muted small">Total Orders</span>
-                <span className="fw-bold">{orders.length}</span>
-              </div>
-              <div className="d-flex justify-content-between mb-2">
-                <span className="text-muted small">Delivered</span>
-                <span className="fw-bold text-success">{orders.filter(o => o.orderStatus === 'Delivered').length}</span>
-              </div>
-              <div className="d-flex justify-content-between">
-                <span className="text-muted small">In Progress</span>
-                <span className="fw-bold text-info">{orders.filter(o => !['Delivered', 'Cancelled'].includes(o.orderStatus)).length}</span>
-              </div>
-            </div>
-          </div>
+        {/* Page Header */}
+        <div className="text-center mb-4">
+          <h2 style={{ color: '#0B6F73', fontWeight: '600' }}>
+            <i className="bi bi-person-circle me-2"></i>
+            My Account
+          </h2>
+          <p className="text-muted">Manage your profile and track your orders</p>
         </div>
 
-        {/* Orders */}
-        <div className="col-md-8">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body p-4">
-              <h5 className="mb-4" style={{ color: "#0B6F73" }}>
-                <i className="bi bi-bag me-2"></i>My Orders
-              </h5>
-              
-              {loading ? (
-                <div className="text-center py-4">
-                  <div className="spinner-border" style={{ color: "#0B6F73" }} role="status">
-                    <span className="visually-hidden">Loading...</span>
+        <div className="row">
+          {/* Profile Card */}
+          <div className="col-md-4">
+            <div 
+              className="card border-0 mb-4"
+              style={{ 
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+              }}
+            >
+              <div className="card-body p-4">
+                <div className="text-center mb-3">
+                  <div 
+                    className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                    style={{ 
+                      width: 80, 
+                      height: 80, 
+                      backgroundColor: '#0B6F73', 
+                      color: 'white', 
+                      fontSize: '32px',
+                      boxShadow: '0 4px 15px rgba(11, 111, 115, 0.3)'
+                    }}
+                  >
+                    {user.name?.charAt(0)?.toUpperCase()}
                   </div>
+                  <h5 className="mb-0 mt-2">{user.name}</h5>
+                  <p className="text-muted small mb-0">{user.email}</p>
                 </div>
-              ) : orders.length === 0 ? (
-                <div className="text-center py-4">
-                  <i className="bi bi-bag-x" style={{ fontSize: '48px', color: '#ccc' }}></i>
-                  <p className="text-muted mt-2">No orders yet</p>
-                  <Link to="/shop" className="btn rounded-0" style={{ backgroundColor: "#0B6F73", color: "#fff" }}>
-                    Start Shopping
-                  </Link>
+                <hr />
+                <div className="mb-3">
+                  <div className="d-flex align-items-center mb-2">
+                    <i className="bi bi-person me-2" style={{ color: '#0B6F73', width: '20px' }}></i>
+                    <span className="text-muted small">Name:</span>
+                    <span className="ms-auto fw-medium">{user.name}</span>
+                  </div>
+                  <div className="d-flex align-items-center mb-2">
+                    <i className="bi bi-envelope me-2" style={{ color: '#0B6F73', width: '20px' }}></i>
+                    <span className="text-muted small">Email:</span>
+                    <span className="ms-auto fw-medium small">{user.email}</span>
+                  </div>
+                  {user.phone && (
+                    <div className="d-flex align-items-center">
+                      <i className="bi bi-phone me-2" style={{ color: '#0B6F73', width: '20px' }}></i>
+                      <span className="text-muted small">Phone:</span>
+                      <span className="ms-auto fw-medium">{user.phone}</span>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="orders-list">
-                  {orders.map(order => (
-                    <div key={order._id} className="border rounded-0 mb-3 overflow-hidden">
-                      {/* Order Header */}
-                      <div
-                        className="p-3 d-flex justify-content-between align-items-center"
-                        style={{ backgroundColor: '#f8f9fa', cursor: 'pointer' }}
-                        onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}
+                <button 
+                  onClick={handleLogout} 
+                  className="btn btn-outline-danger w-100"
+                  style={{ borderRadius: '8px' }}
+                >
+                  <i className="bi bi-box-arrow-right me-2"></i>Logout
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div 
+              className="card border-0 mb-4"
+              style={{ 
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+              }}
+            >
+              <div className="card-body p-4">
+                <h6 className="mb-3 fw-semibold" style={{ color: "#0B6F73" }}>
+                  <i className="bi bi-graph-up me-2"></i>Order Summary
+                </h6>
+                <div className="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                  <span className="text-muted small">Total Orders</span>
+                  <span className="badge bg-secondary px-3">{orders.length}</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                  <span className="text-muted small">Delivered</span>
+                  <span className="badge bg-success px-3">{orders.filter(o => o.orderStatus === 'Delivered').length}</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-muted small">In Progress</span>
+                  <span className="badge bg-info px-3">{orders.filter(o => !['Delivered', 'Cancelled'].includes(o.orderStatus)).length}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Orders */}
+          <div className="col-md-8">
+            <div 
+              className="card border-0"
+              style={{ 
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+              }}
+            >
+              <div className="card-body p-4">
+                <h5 className="mb-4 fw-semibold" style={{ color: "#0B6F73" }}>
+                  <i className="bi bi-bag me-2"></i>My Orders
+                </h5>
+                
+                {loading ? (
+                  <div className="text-center py-5">
+                    <div className="spinner-border" style={{ color: "#0B6F73", width: '3rem', height: '3rem' }} role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : orders.length === 0 ? (
+                  <div className="text-center py-5">
+                    <div 
+                      className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
+                      style={{ width: '80px', height: '80px', backgroundColor: '#f8f9fa' }}
+                    >
+                      <i className="bi bi-bag-x" style={{ fontSize: '40px', color: '#ccc' }}></i>
+                    </div>
+                    <h5 className="text-muted mb-2">No orders yet</h5>
+                    <p className="text-muted small mb-3">Start shopping to see your orders here</p>
+                    <Link 
+                      to="/shop" 
+                      className="btn text-white px-4"
+                      style={{ backgroundColor: "#0B6F73", borderRadius: '8px' }}
+                    >
+                      <i className="bi bi-bag-plus me-2"></i>Start Shopping
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="orders-list">
+                    {orders.map(order => (
+                      <div 
+                        key={order._id} 
+                        className="mb-3 overflow-hidden"
+                        style={{ 
+                          borderRadius: '10px',
+                          border: '1px solid #e9ecef'
+                        }}
                       >
+                        {/* Order Header */}
+                        <div
+                          className="p-3 d-flex justify-content-between align-items-center"
+                          style={{ backgroundColor: '#f8f9fa', cursor: 'pointer' }}
+                          onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)}
+                        >
                         <div>
                           <p className="mb-0 fw-semibold small">
                             Order #{order._id.slice(-8).toUpperCase()}
@@ -370,8 +446,8 @@ export default function Account() {
                           {/* Actions */}
                           <div className="mt-3 d-flex gap-2">
                             <button
-                              className="btn btn-sm text-white rounded-0"
-                              style={{ backgroundColor: '#0B6F73' }}
+                              className="btn btn-sm text-white"
+                              style={{ backgroundColor: '#0B6F73', borderRadius: '6px' }}
                               onClick={(e) => { e.stopPropagation(); setInvoiceOrder(order); }}
                             >
                               <i className="bi bi-receipt me-1"></i>Invoice
@@ -386,6 +462,7 @@ export default function Account() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -23,6 +23,9 @@
     .then(async () => {
       console.log("✅ MongoDB connected ✔️");
       
+      // ✅ Fix orderId index issue (drop problematic unique index)
+      await fixOrderIdIndex();
+      
       // ✅ Create default admin if not exists
       await createDefaultAdmin();
     })
@@ -30,6 +33,35 @@
       console.log("❌ DB connection error:", err.message);
       console.log("💡 Make sure MongoDB is running: mongod --dbpath='C:/data/db'");
     });
+
+  // ✅ Function to fix orderId index issue
+  async function fixOrderIdIndex() {
+    try {
+      const Order = require("./models/Order");
+      const collection = mongoose.connection.collection('orders');
+      
+      // Get all indexes
+      const indexes = await collection.indexes();
+      
+      // Find and drop the problematic orderId unique index
+      for (const index of indexes) {
+        if (index.key && index.key.orderId && index.unique) {
+          console.log("⚡ Dropping problematic orderId index...");
+          await collection.dropIndex(index.name);
+          console.log("✅ Fixed orderId index - unique constraint removed");
+        }
+      }
+      
+      // Sync indexes from schema
+      await Order.syncIndexes();
+      console.log("✅ Order indexes synchronized");
+    } catch (error) {
+      // Index might not exist, that's okay
+      if (error.code !== 27) { // 27 = IndexNotFound
+        console.log("ℹ️ Order index fix:", error.message);
+      }
+    }
+  }
 
   // ✅ Function to create default admin
   async function createDefaultAdmin() {

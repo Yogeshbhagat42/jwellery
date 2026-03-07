@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
@@ -16,15 +16,35 @@ export default function Checkout() {
   const [showDemoPayment, setShowDemoPayment] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
 
-  const [address, setAddress] = useState({
-    fullName: '',
-    phone: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    state: '',
-    pincode: ''
-  });
+  // Initialize address from localStorage if available
+  const getSavedAddress = () => {
+    try {
+      const saved = localStorage.getItem('savedShippingAddress');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Error loading saved address:', e);
+    }
+    return {
+      fullName: '',
+      phone: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      pincode: ''
+    };
+  };
+
+  const [address, setAddress] = useState(getSavedAddress);
+
+  // Save address to localStorage whenever it changes
+  useEffect(() => {
+    if (address.fullName || address.phone || address.addressLine1) {
+      localStorage.setItem('savedShippingAddress', JSON.stringify(address));
+    }
+  }, [address]);
 
   const handleChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -226,56 +246,70 @@ export default function Checkout() {
   }
 
   return (
-    <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
-      <h4 className="text-center mb-4" style={{ color: '#0B6F73' }}>Checkout</h4>
+    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff' }}>
+      <div className="container py-5" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        {/* Page Header */}
+        <div className="text-center mb-4">
+          <h2 style={{ color: '#0B6F73', fontWeight: '600' }}>
+            <i className="bi bi-bag-check me-2"></i>
+            Checkout
+          </h2>
+          <p className="text-muted">Complete your order</p>
+        </div>
 
-      <div className="row g-4">
-        <div className="col-md-7">
-          <div className="bg-white p-4 shadow-sm">
-            <h5 className="mb-3" style={{ color: '#0B6F73' }}>
-              <i className="bi bi-geo-alt me-2"></i>Shipping Address
-            </h5>
-            <form onSubmit={handlePlaceOrder}>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label small">Full Name *</label>
-                  <input type="text" name="fullName" className="form-control rounded-0" value={address.fullName} onChange={handleChange} required style={{ borderColor: '#0B6F73' }} />
+        <div className="row g-4">
+          <div className="col-md-7">
+            <div 
+              className="bg-white p-4"
+              style={{ 
+                borderRadius: '12px',
+                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)'
+              }}
+            >
+              <h5 className="mb-3 fw-semibold" style={{ color: '#0B6F73' }}>
+                <i className="bi bi-geo-alt me-2"></i>Shipping Address
+              </h5>
+              <form onSubmit={handlePlaceOrder}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label small fw-medium">Full Name *</label>
+                    <input type="text" name="fullName" className="form-control" value={address.fullName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label small fw-medium">Phone *</label>
+                    <input type="tel" name="phone" className="form-control" value={address.phone} onChange={handleChange} required maxLength={10} style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-12">
+                    <label className="form-label small fw-medium">Address Line 1 *</label>
+                    <input type="text" name="addressLine1" className="form-control" value={address.addressLine1} onChange={handleChange} required placeholder="House no., Building, Street" style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-12">
+                    <label className="form-label small fw-medium">Address Line 2</label>
+                    <input type="text" name="addressLine2" className="form-control" value={address.addressLine2} onChange={handleChange} placeholder="Landmark, Area (optional)" style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label small fw-medium">City *</label>
+                    <input type="text" name="city" className="form-control" value={address.city} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label small fw-medium">State *</label>
+                    <input type="text" name="state" className="form-control" value={address.state} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label small fw-medium">Pincode *</label>
+                    <input type="text" name="pincode" className="form-control" value={address.pincode} onChange={handleChange} required maxLength={6} style={{ borderRadius: '8px' }} />
+                  </div>
                 </div>
-                <div className="col-md-6">
-                  <label className="form-label small">Phone *</label>
-                  <input type="tel" name="phone" className="form-control rounded-0" value={address.phone} onChange={handleChange} required maxLength={10} style={{ borderColor: '#0B6F73' }} />
-                </div>
-                <div className="col-12">
-                  <label className="form-label small">Address Line 1 *</label>
-                  <input type="text" name="addressLine1" className="form-control rounded-0" value={address.addressLine1} onChange={handleChange} required placeholder="House no., Building, Street" style={{ borderColor: '#0B6F73' }} />
-                </div>
-                <div className="col-12">
-                  <label className="form-label small">Address Line 2</label>
-                  <input type="text" name="addressLine2" className="form-control rounded-0" value={address.addressLine2} onChange={handleChange} placeholder="Landmark, Area (optional)" style={{ borderColor: '#0B6F73' }} />
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label small">City *</label>
-                  <input type="text" name="city" className="form-control rounded-0" value={address.city} onChange={handleChange} required style={{ borderColor: '#0B6F73' }} />
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label small">State *</label>
-                  <input type="text" name="state" className="form-control rounded-0" value={address.state} onChange={handleChange} required style={{ borderColor: '#0B6F73' }} />
-                </div>
-                <div className="col-md-4">
-                  <label className="form-label small">Pincode *</label>
-                  <input type="text" name="pincode" className="form-control rounded-0" value={address.pincode} onChange={handleChange} required maxLength={6} style={{ borderColor: '#0B6F73' }} />
-                </div>
-              </div>
 
               {/* Payment Method Selection */}
               <div className="mt-4">
-                <h5 className="mb-3" style={{ color: '#0B6F73' }}>
+                <h5 className="mb-3 fw-semibold" style={{ color: '#0B6F73' }}>
                   <i className="bi bi-credit-card me-2"></i>Payment Method
                 </h5>
 
                 <div
-                  className="p-3 border mb-2 rounded-0"
-                  style={{ borderColor: paymentMethod === 'COD' ? '#0B6F73' : '#dee2e6', backgroundColor: paymentMethod === 'COD' ? '#f0fafa' : 'white', cursor: 'pointer' }}
+                  className="p-3 border mb-2"
+                  style={{ borderRadius: '10px', borderColor: paymentMethod === 'COD' ? '#0B6F73' : '#dee2e6', backgroundColor: paymentMethod === 'COD' ? '#f0fafa' : 'white', cursor: 'pointer' }}
                   onClick={() => setPaymentMethod('COD')}
                 >
                   <div className="form-check d-flex align-items-center gap-3">
