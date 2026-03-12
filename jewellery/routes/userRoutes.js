@@ -37,27 +37,44 @@ router.post("/forgot-password", async (req, res) => {
     console.log("✅ Token saved for user:", user.email);
 
     // Create reset URL - use your frontend port
-    const resetUrl = `http://192.168.1.5:5173/reset-password/${resetToken}`;
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
 
     // IMPORTANT: Use .env variables, NOT hardcoded values
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_USER,   // ✅ .env se lega
-        pass: process.env.EMAIL_PASS     // ✅ .env se lega
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       }
     });
 
-    // Better email format
+    // Beautiful email template
     await transporter.sendMail({
       from: `"Jewellery Store" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: "Password Reset Link",
+      subject: "🔐 Reset Your Password - Jewellery Store",
       html: `
-        <h2>Reset Your Password</h2>
-        <p>Click the link below:</p>
-        <a href="${resetUrl}">${resetUrl}</a>
-        <p>Link expires in 1 hour</p>
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+          <div style="background: linear-gradient(135deg, #0B6F73 0%, #0a5c5f 100%); padding: 40px 30px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">💎 Jewellery Store</h1>
+            <p style="color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 14px;">Password Reset Request</p>
+          </div>
+          <div style="padding: 40px 30px;">
+            <h2 style="color: #333; margin-top: 0;">Hello ${user.name || 'there'}!</h2>
+            <p style="color: #666; line-height: 1.6; font-size: 15px;">We received a request to reset your password. Click the button below to create a new password:</p>
+            <div style="text-align: center; margin: 35px 0;">
+              <a href="${resetUrl}" style="background: linear-gradient(135deg, #0B6F73 0%, #0a5c5f 100%); color: #ffffff; padding: 14px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(11,111,115,0.3);">Reset Password</a>
+            </div>
+            <p style="color: #999; font-size: 13px; line-height: 1.5;">If the button doesn't work, copy and paste this link in your browser:</p>
+            <p style="color: #0B6F73; font-size: 13px; word-break: break-all;">${resetUrl}</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0;" />
+            <p style="color: #999; font-size: 12px;">⏰ This link expires in 1 hour.</p>
+            <p style="color: #999; font-size: 12px;">If you didn't request this, please ignore this email.</p>
+          </div>
+          <div style="background: #f8f9fa; padding: 20px 30px; text-align: center;">
+            <p style="color: #aaa; font-size: 11px; margin: 0;">© 2026 Jewellery Store. All rights reserved.</p>
+          </div>
+        </div>
       `
     });
 

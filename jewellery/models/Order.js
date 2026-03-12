@@ -36,13 +36,12 @@ const orderSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Generate unique orderId before saving
-orderSchema.pre('save', async function(next) {
+orderSchema.pre('save', async function() {
   if (!this.orderId) {
     const timestamp = Date.now().toString(36).toUpperCase();
     const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
     this.orderId = `ORD-${timestamp}-${randomPart}`;
   }
-  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);
