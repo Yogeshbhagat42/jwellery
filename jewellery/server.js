@@ -6,7 +6,14 @@
   require("dotenv").config();
 
   const app = express();
-  app.use(cors()); 
+  app.use(cors({
+    origin: [
+      'https://jwellery-virid.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:5174'
+    ],
+    credentials: true
+  })); 
   // Middleware
   app.use(express.json());
 
@@ -242,13 +249,16 @@ const orderRoutes = require("./routes/orderRoutes");
 
   // ✅ Start server
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`🔐 Admin Login: POST http://localhost:${PORT}/api/admin/login`);
-    console.log(`📦 Products API: GET http://localhost:${PORT}/api/products`);
-    console.log(`👤 Check Admin: GET http://localhost:${PORT}/check-admin`);
+  if (require.main === module) {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🔐 Admin Login: POST http://localhost:${PORT}/api/admin/login`);
+      console.log(`📦 Products API: GET http://localhost:${PORT}/api/products`);
+      console.log(`👤 Check Admin: GET http://localhost:${PORT}/check-admin`);
+      console.log(`👤 User Register: POST http://localhost:${PORT}/api/users/register`);
+      console.log(`👤 User Login: POST http://localhost:${PORT}/api/users/login`);
+      console.log(`👥 Check Users: GET http://localhost:${PORT}/check-users`);
+    });
+  }
 
-    console.log(`👤 User Register: POST http://localhost:${PORT}/api/users/register`);
-    console.log(`👤 User Login: POST http://localhost:${PORT}/api/users/login`);
-    console.log(`👥 Check Users: GET http://localhost:${PORT}/check-users`);
-  });
+  module.exports = app;

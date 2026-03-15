@@ -1,5 +1,20 @@
 {
-  "buildCommand": "cd client-side && npm install && npm run build",
-  "outputDirectory": "client-side/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "version": 2,
+  "builds": [
+    {
+      "src": "jewellery/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client-side/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dist" }
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/jewellery/server.js" },
+    { "src": "/uploads/(.*)", "dest": "/jewellery/server.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/client-side/dist/index.html" }
+  ]
 }
