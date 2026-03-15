@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/products";
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = `${BASE_URL}/api/products`;
 
 // ============== AUTH HELPER FUNCTIONS ==============
 
@@ -237,7 +238,7 @@ export const checkAuth = async () => {
     }
     
     // Verify token with backend
-    const response = await axios.get('http://localhost:5000/api/admin/me', {
+    const response = await axios.get(`${BASE_URL}/api/admin/me`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -254,7 +255,7 @@ export const checkAuth = async () => {
 // ============== ADMIN LOGIN ==============
 export const adminLogin = async (email, password) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/admin/login', {
+    const response = await axios.post(`${BASE_URL}/api/admin/login`, {
       email,
       password
     });
@@ -294,7 +295,7 @@ export const adminLogout = () => {
 // ============== DASHBOARD STATS ==============
 export const getDashboardStats = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/admin/stats', getAuthHeaders('application/json'));
+    const response = await axios.get(`${BASE_URL}/api/admin/stats`, getAuthHeaders('application/json'));
     return response.data;
   } catch (error) {
     handleAuthError(error);
@@ -312,7 +313,7 @@ export const getAdminOrders = async (status = '', page = 1, limit = 20) => {
     params.append('limit', limit);
 
     const response = await axios.get(
-      `http://localhost:5000/api/admin/orders?${params.toString()}`,
+      `${BASE_URL}/api/admin/orders?${params.toString()}`,
       getAuthHeaders('application/json')
     );
     return response.data;
@@ -327,7 +328,7 @@ export const getAdminOrders = async (status = '', page = 1, limit = 20) => {
 export const updateOrderStatus = async (orderId, status) => {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/admin/orders/${orderId}/status`,
+      `${BASE_URL}/api/admin/orders/${orderId}/status`,
       { status },
       getAuthHeaders('application/json')
     );
@@ -343,7 +344,7 @@ export const updateOrderStatus = async (orderId, status) => {
 export const getCustomers = async () => {
   try {
     const response = await axios.get(
-      'http://localhost:5000/api/admin/customers',
+      `${BASE_URL}/api/admin/customers`,
       getAuthHeaders('application/json')
     );
     return response.data;

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { deleteProduct } from "../services/productApi";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const ProductCards = ({ products = [], onRefresh }) => {
   const navigate = useNavigate();
   const [viewProduct, setViewProduct] = useState(null);
@@ -64,7 +66,7 @@ const ProductCards = ({ products = [], onRefresh }) => {
                 {product.images && product.images.length > 0 ? (
                   <img
                     src={product.images[0].startsWith('/') 
-                      ? `http://localhost:5000${product.images[0]}` 
+                      ? `${API_URL}${product.images[0]}`
                       : product.images[0]
                     }
                     alt={product.name}
@@ -302,7 +304,7 @@ const ProductCards = ({ products = [], onRefresh }) => {
                       {viewProduct.images && viewProduct.images.length > 0 ? (
                         <img
                           src={mainImage.startsWith('/') 
-                            ? `http://localhost:5000${mainImage}` 
+                            ? `${API_URL}${mainImage}`
                             : mainImage
                           }
                           alt={viewProduct.name}
@@ -356,7 +358,7 @@ const ProductCards = ({ products = [], onRefresh }) => {
                           >
                             <img
                               src={image.startsWith('/') 
-                                ? `http://localhost:5000${image}` 
+                                ? `${API_URL}${image}`
                                 : image
                               }
                               alt={`${viewProduct.name} view ${index + 1}`}

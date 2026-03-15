@@ -33,7 +33,7 @@ const TrackOrder = () => {
     setOrder(null);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId.trim()}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/orders/${orderId.trim()}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();

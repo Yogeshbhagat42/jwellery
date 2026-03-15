@@ -3,6 +3,7 @@ const router = express.Router();
 const Wishlist = require('../models/Wishlist');
 const Product = require('../models/productModel');
 const protect = require('../middleware/userAuth');
+const BASE_URL = process.env.SERVER_URL || 'http://localhost:5000';
 
 // GET /api/wishlist - Get user's wishlist
 router.get('/', protect, async (req, res) => {
@@ -20,7 +21,7 @@ router.get('/', protect, async (req, res) => {
       const obj = product.toObject();
       if (obj.images && obj.images.length > 0) {
         obj.images = obj.images.map(img =>
-          img.startsWith('http') ? img : `http://localhost:5000/uploads/${img}`
+          img.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`
         );
       }
       return obj;
@@ -57,7 +58,7 @@ router.post('/add', protect, async (req, res) => {
       const obj = product.toObject();
       if (obj.images && obj.images.length > 0) {
         obj.images = obj.images.map(img =>
-          img.startsWith('http') ? img : `http://localhost:5000/uploads/${img}`
+          img.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`
         );
       }
       return obj;
@@ -89,7 +90,7 @@ router.delete('/remove/:productId', protect, async (req, res) => {
       const obj = product.toObject();
       if (obj.images && obj.images.length > 0) {
         obj.images = obj.images.map(img =>
-          img.startsWith('http') ? img : `http://localhost:5000/uploads/${img}`
+          img.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`
         );
       }
       return obj;

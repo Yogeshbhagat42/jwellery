@@ -2,6 +2,8 @@
   import { addProduct, getProductById, updateProduct } from "../services/productApi";
   import { useParams, useNavigate } from "react-router-dom";
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
   const AddProduct = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -104,8 +106,8 @@
           console.log("🖼️ Images found:", productData.images);
           const previews = productData.images.map(img => {
             if (img.startsWith('http')) return img;
-            if (img.startsWith('/')) return `http://localhost:5000${img}`;
-            return `http://localhost:5000/uploads/${img}`;
+            if (img.startsWith('/')) return `${API_URL}${img}`;
+            return `${API_URL}/uploads/${img}`;
           });
           setImagePreviews(previews);
           console.log("🖼️ Image previews set:", previews);

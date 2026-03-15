@@ -3,6 +3,7 @@ const router = express.Router();
 const Cart = require('../models/Cart');
 const Product = require('../models/productModel');
 const protect = require('../middleware/userAuth');
+const BASE_URL = process.env.SERVER_URL || 'http://localhost:5000';
 
 // Get cart
 router.get('/', protect, async (req, res) => {
@@ -31,7 +32,7 @@ router.post('/add', protect, async (req, res) => {
     let imageUrl = '';
     if (product.images && product.images.length > 0) {
       const img = product.images[0];
-      imageUrl = img.startsWith('http') ? img : `http://localhost:5000/uploads/${img}`;
+      imageUrl = img.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`;
     }
     
     let cart = await Cart.findOne({ userId: req.user._id });

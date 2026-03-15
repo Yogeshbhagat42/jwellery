@@ -3,6 +3,7 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const protect = require('../middleware/userAuth');
+const BASE_URL = process.env.SERVER_URL || 'http://localhost:5000';
 
 // POST /api/orders - Create new order from cart
 router.post('/', protect, async (req, res) => {
@@ -42,7 +43,7 @@ router.post('/', protect, async (req, res) => {
         name: item.name,
         price: Number(item.price),
         image: item.image && !item.image.startsWith('http') 
-          ? `http://localhost:5000/uploads/${item.image}` 
+          ? `${BASE_URL}/uploads/${item.image}` 
           : item.image,
         quantity: Number(item.quantity)
       })),

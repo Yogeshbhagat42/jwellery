@@ -37,7 +37,7 @@ router.post("/forgot-password", async (req, res) => {
     console.log("✅ Token saved for user:", user.email);
 
     // Create reset URL - use your frontend port
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
 
     // IMPORTANT: Use .env variables, NOT hardcoded values
     const transporter = nodemailer.createTransport({

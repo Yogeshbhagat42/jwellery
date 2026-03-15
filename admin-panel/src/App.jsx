@@ -12,6 +12,7 @@ import Customers from "./pages/Customers";
 import AdminLogin from "./pages/AdminLogin";
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
@@ -32,7 +33,7 @@ function App() {
     }
     
     try {
-      const response = await fetch('http://localhost:5000/api/admin/me', {
+      const response = await fetch(`${API_URL}/api/admin/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -57,7 +58,7 @@ function App() {
   // Login function - calls backend API
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', {
+      const response = await fetch(`${API_URL}/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

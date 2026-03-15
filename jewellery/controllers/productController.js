@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const BASE_URL = process.env.SERVER_URL || 'http://localhost:5000';
 
 // ✅ CREATE PRODUCT WITH IMAGES
 exports.createProduct = async (req, res) => {
@@ -56,7 +57,7 @@ exports.getAllProducts = async (req, res) => {
       
       if (productObj.images && productObj.images.length > 0) {
         productObj.images = productObj.images.map(img => 
-          `http://localhost:5000/uploads/${img}`
+          `${BASE_URL}/uploads/${img}`
         );
       }
       
@@ -98,7 +99,7 @@ exports.getProductById = async (req, res) => {
         // If image already has full URL, keep it
         if (img.startsWith('http')) return img;
         // Otherwise add base URL
-        return `http://localhost:5000/uploads/${img}`;
+        return `${BASE_URL}/uploads/${img}`;
       });
     }
     
@@ -243,7 +244,7 @@ exports.searchProducts = async (req, res) => {
       const productObj = product.toObject();
       if (productObj.images && productObj.images.length > 0) {
         productObj.images = productObj.images.map(img =>
-          img.startsWith('http') ? img : `http://localhost:5000/uploads/${img}`
+          img.startsWith('http') ? img : `${BASE_URL}/uploads/${img}`
         );
       }
       return productObj;
@@ -272,7 +273,7 @@ exports.getProductsByCategory = async (req, res) => {
       
       if (productObj.images && productObj.images.length > 0) {
         productObj.images = productObj.images.map(img => 
-          `http://localhost:5000/uploads/${img}`
+          `${BASE_URL}/uploads/${img}`
         );
       }
       
